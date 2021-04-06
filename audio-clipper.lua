@@ -11,20 +11,26 @@ function err(msg)
 end
 
 function get_vid_dir()
-    local dir = a.decode_path("?video")
-    if dir == "?video" then -- if there is not, in fact, a video
-        return nil
+    local aud_dir = a.decode_path("?audio")
+    local vid_dir = a.decode_path("?video")
+    if aud_dir ~= "?audio" then
+        return aud_dir
+    elseif vid_dir ~= "?video" then -- if there is not, in fact, a video
+        return vid_dir
     else
-        return dir
+        return nil
     end
 end
 
 function get_vid()
+    local aud = a.project_properties().audio_file -- try get the audio first, if it's loaded separately
     local vid = a.project_properties().video_file
-    if vid == "" then
-        return nil
-    else
+    if aud ~= "" then
+        return aud
+    elseif vid ~= "" then
         return vid
+    else
+        return nil
     end
 end
 
@@ -87,13 +93,13 @@ function gui(subs, sel)
     local in_path = get_vid()
     local out_path = get_vid_dir()
     if in_path == nil or out_path == nil then -- if no video is loaded
-        in_path = "No video loaded. Specify a path."
+        in_path = "No audio/video loaded. Specify a path."
         out_path = in_path -- both the same error message
     else
         out_path = out_path.."/audioclipper_output/" -- make the out path the one we actually want
     end
 
-    local get_input={{class="label",x=0,y=0,label="Video's audio format:"},{class="dropdown",name="format",x=0,y=1,width=2,height=1,items={"AAC","Opus","FLAC","Custom"},value="Audio Format",hint="If you don't know, you should probably press \"Just make it FLAC\""},{class="label",x=0,y=2,label="Custom Extension:"},{class="edit",name="custom",x=1,y=2,value="mka",hint="You'll probably be fine with mka, because matroska can contain pretty much anything"},{class="label",x=0,y=3,label="Delay (ms):"},{class="intedit",name="delay",x=1,y=3,value=0,hint="to prevent timing fuckery with weird raws"},{class="label",x=0,y=4,label="Input path:"},{class="edit",name="in_path",x=0,y=5,width=2,height=1,value=in_path,hint="where the audio comes from"},{class="label",x=0,y=6,label="Output path (will be created if it doesn't already exist):"},{class="edit",name="out_path",x=0,y=7,width=2,height=1,value=out_path,hint="where the audio goes"}}
+    local get_input={{class="label",x=0,y=0,label="Input's audio format:"},{class="dropdown",name="format",x=0,y=1,width=2,height=1,items={"AAC","Opus","FLAC","Custom"},value="Audio Format",hint="If you don't know, you should probably press \"Just make it FLAC\", or use mka."},{class="label",x=0,y=2,label="Custom Extension:"},{class="edit",name="custom",x=1,y=2,value="mka",hint="You'll probably be fine with mka, because matroska can contain pretty much anything"},{class="label",x=0,y=3,label="Delay (ms):"},{class="intedit",name="delay",x=1,y=3,value=0,hint="to prevent timing fuckery with weird raws"},{class="label",x=0,y=4,label="Input path:"},{class="edit",name="in_path",x=0,y=5,width=2,height=1,value=in_path,hint="where the audio comes from"},{class="label",x=0,y=6,label="Output path (will be created if it doesn't already exist):"},{class="edit",name="out_path",x=0,y=7,width=2,height=1,value=out_path,hint="where the audio goes"}}
     local pressed, results = a.dialog.display(get_input, {"Cancel", "OK", "Just make it FLAC"})
     -- there's probably something that can detect the format automatically, but I do not know what it is.
     if pressed == "Cancel" then
@@ -113,7 +119,7 @@ end
 function non_gui(subs, sel) -- no gui, so you can bind it to a hotkey
     local vid = get_vid()
     if vid == nil then
-        err("Need a video!\nSpecify one in the GUI, or load one in aegisub.")
+        err("Need an input!\nSpecify a path in the GUI, or load one in aegisub.")
     else
         loop(subs, sel, get_vid(), make_out_path(get_vid_dir().."/audioclipper_output/"), 'flac', false, 0)
     end
