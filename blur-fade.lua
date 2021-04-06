@@ -1,7 +1,7 @@
 script_name="Blur Fade"
 script_description="Makes fade with blur."
 script_author="garret"
-script_version="2021-04-05"
+script_version="2021-04-06"
 include("utils.lua")
 
 -- TODO: add proper fade as well
@@ -40,5 +40,6 @@ function main(sub, sel) -- TODO: make code less shit
             make_lines(sub, sel, i, "{\\bord0\\shad0\\t(\\blur100)}", "{\\t(\\blur100)\\1a&FF&\\3a&FF&\\shad0.01}", "{\\shad1.5\\1aFF\\bord0\\t(\\blur100)}")
         end
     end
+	aegisub.set_undo_point(script_name)
 end
 aegisub.register_macro(script_name, script_description, main)
