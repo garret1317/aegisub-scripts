@@ -1,10 +1,14 @@
 script_name = "Audio Clipper"
 script_description = "Extracts audio from the selected line(s).\nNeeds ffmpeg."
 script_author = "garret"
-script_version = "2021-04-04"
+script_version = "2021-04-06"
 
 a = aegisub
-ok = {"OK"}, {close = "OK"} -- just an "OK" button, for error messages.
+
+function err(msg)
+    a.dialog.display({{class = "label", label = msg}}, {"OK"}, {close = "OK"})
+    a.cancel()
+end
 
 function get_vid_dir()
     local dir = a.decode_path("?video")
@@ -27,8 +31,7 @@ end
 function get_format(copy, format, custom)
     if copy == true then -- if we do want to copy
         if format == "" then -- format is the thing from the dropdown
-            a.dialog.display({{class = "label", label = "Need a format!"}}, ok)
-            a.cancel()
+            err("Need a format!")
         elseif format == "AAC" then -- these are the most common audio formats i've seen
             return "m4a"
         elseif format == "Opus" then
@@ -44,8 +47,7 @@ end
 
 function make_out_path(out_path)
     if out_path == "" then
-        a.dialog.display({{class = "label", label = "Need an output path!"}}, ok)
-        a.cancel()
+        err("Need an output path!")
     end
     os.execute('mkdir "'..out_path..'"') -- if it doesn't exist, it makes it, and if it does, it errors.
     return out_path -- either way, the path now exists. (probably)
@@ -111,7 +113,7 @@ end
 function non_gui(subs, sel) -- no gui, so you can bind it to a hotkey
     local vid = get_vid()
     if vid == nil then
-        a.dialog.display({{class = "label", label = "Need a video!\nSpecify one in the GUI, or load one in aegisub."}}, ok)
+        err("Need a video!\nSpecify one in the GUI, or load one in aegisub.")
     else
         loop(subs, sel, get_vid(), make_out_path(get_vid_dir().."/audioclipper_output/"), 'flac', false, 0)
     end
