@@ -16,4 +16,21 @@ function comment(subs, sel)
     aegisub.set_undo_point(script_name)
 end
 
+function undo(subs, sel)
+    for i=#sel,1,-1 do
+        local edit=subs[sel[i]]
+        local original=subs[sel[i]+1]
+        --aegisub.log("Edit\nindex = "..i..", text = "..edit.text.."\n")
+        --aegisub.log("Original\nindex = "..(i + 1)..", text = "..original.text.."\n")
+        if edit.comment == false and original.comment == true then
+
+            original.comment = false
+            subs[sel[i]+1] = original
+            subs.delete(sel[i])
+        end
+    end
+    aegisub.set_undo_point("Undo "..script_name)
+end
+
 aegisub.register_macro(script_name, script_description, comment)
+aegisub.register_macro(script_name.." - Undo", "Uncomments a line and restores the original", undo)
