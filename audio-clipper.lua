@@ -1,7 +1,7 @@
 script_name = "Audio Clipper"
 script_description = "Extracts audio from the selected line(s).\nNeeds ffmpeg."
 script_author = "garret"
-script_version = "2021-04-06"
+script_version = "2021-04-10"
 
 a = aegisub
 
@@ -63,7 +63,7 @@ function extract_audio(in_path, start_time, end_time, out_path, name, extension,
     if copy == true then
         os.execute('ffmpeg -i "'..in_path..'" -codec copy -vn -ss '..start_time..'ms -to '..end_time..'ms "'..out_path..name..'.'..extension..'" -y')
      -- takes the video as input, copies the streams, but doesn't include video. sets it to start at the start of the selection, and end at the end of it. outputs to our chosen out path with our chosen name and extension. overwrites anything with the same name.
-    else
+    elseif copy == false then
         os.execute('ffmpeg -i "'..in_path..'" -vn -ss '..start_time..'ms -to '..end_time..'ms "'..out_path..name..'.'..extension..'" -y')
      -- same as above, but doesn't copy the stream (transcodes to flac)
     end
@@ -105,15 +105,15 @@ function gui(subs, sel)
     if pressed == "Cancel" then
         a.cancel()
     elseif pressed == "OK" then
-        local do_copy = true
+        do_copy = true
     elseif pressed == "Just make it FLAC" then
-        local do_copy = false
+        do_copy = false
     end
     local extension = get_format(do_copy, results.format, results.custom) -- gets file extension
     local delay = results.delay
     in_path = results.in_path
     out_path = make_out_path(results.out_path)
-    loop(subs, sel, in_path, out_path, extension, copy, delay)
+    loop(subs, sel, in_path, out_path, extension, do_copy, delay)
 end
 
 function non_gui(subs, sel) -- no gui, so you can bind it to a hotkey
