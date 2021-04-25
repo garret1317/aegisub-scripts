@@ -30,6 +30,13 @@ Blurs out lines with the effect `blurout`, and blurs in lines with the effect `b
 
 For fancy fade effects. (i.e, when the whole scene blurs out until it's invisible, as a transition)
 
+### Chapter Generator
+
+Makes .xml chapters for matroska.
+
+Makes lines with the effect `chapter` into chapters. Start time of the line is used for the timestamp, text of the line is used for chapter name.
+Language is currently hardcoded to english.
+
 ### Dupe and Comment
 
 Duplicates a line and comments out the original.
