@@ -3,6 +3,8 @@
 Aegisub automation scripts I've written.
 Probably only useful to me.
 
+A few of them are dupes of (parts of) already-existing scripts, because fuck bloat, and fuck depctrl.
+
 ----
 
 ## Script List
@@ -37,6 +39,14 @@ Makes .xml chapters for matroska.
 Makes lines with the effect `chapter` into chapters. Start time of the line is used for the timestamp, text of the line is used for chapter name.
 Language is currently hardcoded to english.
 
+### CR Restyler
+
+`become-fansubber.lua`
+
+select the lines
+it sets them to default style
+wow amazing
+
 ### Dupe and Comment
 
 Duplicates a line and comments out the original.
@@ -49,3 +59,7 @@ Appends an Em-dash (`—`) to the selected line(s).
 Replaces `--` with `—`.
 
 I do not have an em-dash key on my keyboard.
+
+### tagstrip
+
+gets rid of tags (and comments) in the selected line(s)
