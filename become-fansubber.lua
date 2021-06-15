@@ -1,7 +1,7 @@
 script_name="CR Restyler"
 script_description="become a fansubber with a click of a button"
 script_author = "garret"
-script_version = "2"
+script_version = "2021-06-15"
 
 include("cleantags.lua")
 -- Main -> Default
@@ -12,10 +12,10 @@ include("cleantags.lua")
 function add_tags(line)
     local txt = line.text
     local style = line.style
-    if style:find("Italics") then
+    if style:match("Italics") then
         txt="{\\i1}"..txt
     end
-    if style:find("Top") then
+    if style:match("Top") then
         txt="{\\an8}"..txt
     end
     line.text = cleantags(txt)
@@ -24,7 +24,7 @@ end
 
 function change_styles(line)
     local style = line.style
-    if style:find("Top") or style:find("Italics") or style:find("Main") or style:find("Flashback") then
+    if style:match("Top") or style:match("Italics") or style:match("Main") or style:match("Flashback") then
         line.style="Default"
     end
     return line
