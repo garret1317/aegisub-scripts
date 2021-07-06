@@ -60,6 +60,10 @@ Replaces `--` with `—`.
 
 I do not have an em-dash key on my keyboard.
 
+### Scenebleed Detector
+
+Finds scenebleeds in the selected lines, and marks them with an effect (`bleed`).
+
 ### tagstrip
 
 gets rid of tags (and comments) in the selected line(s)
