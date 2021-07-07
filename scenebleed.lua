@@ -21,7 +21,7 @@ function main(sub, sel)
                 else
                     line.effect = line.effect.."; "..bleedstring
                 end
-                sub[i] = mark(line)
+                sub[i] = line
             end
         end
     end
