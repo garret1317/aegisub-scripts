@@ -3,7 +3,9 @@
 Aegisub automation scripts I've written.
 Probably only useful to me.
 
-A few of them are dupes of (parts of) already-existing scripts, because fuck bloat, and fuck depctrl.
+A few of them are dupes of already-existing scripts, or parts of them.
+
+Likely because I didn't know the already-existing one existed, or because it had loads of ~~bloat~~ other stuff along with it (cough cough unanimated).
 
 ----
 
@@ -11,9 +13,9 @@ A few of them are dupes of (parts of) already-existing scripts, because fuck blo
 
 ### A-B
 
-Makes checking pre-timing possible by putting some text in the lines (the actor name, and `a` or `b` (hence the name))
+Makes checking pre-timing possible by putting some text in the lines (the actor name, and `a` or `b`, hence the name)
 
-**Caution: Overwrites every selected line!**
+ignores lines with text in them, prepends to lines with just tags in them
 
 ### Audio Clipper
 
@@ -39,12 +41,16 @@ Makes .xml chapters for matroska.
 Makes lines with the effect `chapter` into chapters. Start time of the line is used for the timestamp, text of the line is used for chapter name.
 Language is currently hardcoded to english.
 
+Basically a dupe of the one in Significance.
+
 ### CR Restyler
 
 `become-fansubber.lua`
 
 select the lines
+
 it sets them to default style
+
 wow amazing
 
 ### Dupe and Comment
@@ -64,7 +70,7 @@ I do not have an em-dash key on my keyboard.
 
 does what it says on the tin.
 
-originally created to convert stuff that should've been alpha-timed in the first place, but also makes new alpha-timing easier
+originally created to convert stuff that should've been alpha-timed in the first place, but also makes creating new alpha-timing easier.
 
 ### Scenebleed Detector
 
@@ -72,4 +78,6 @@ Finds scenebleeds in the selected lines, and marks them with an effect (`bleed`)
 
 ### tagstrip
 
-gets rid of tags (and comments) in the selected line(s)
+gets rid of tags (and comments) in the selected lines.
+
+literally exactly the same as the one that comes with aegi, idk why i made this
