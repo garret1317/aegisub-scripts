@@ -60,6 +60,12 @@ Replaces `--` with `—`.
 
 I do not have an em-dash key on my keyboard.
 
+### K-Timing -> Alpha Timing
+
+does what it says on the tin.
+
+originally created to convert stuff that should've been alpha-timed in the first place, but also makes new alpha-timing easier
+
 ### Scenebleed Detector
 
 Finds scenebleeds in the selected lines, and marks them with an effect (`bleed`).
