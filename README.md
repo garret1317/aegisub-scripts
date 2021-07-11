@@ -75,9 +75,3 @@ originally created to convert stuff that should've been alpha-timed in the first
 ### Scenebleed Detector
 
 Finds scenebleeds in the selected lines, and marks them with an effect (`bleed`).
-
-### tagstrip
-
-gets rid of tags (and comments) in the selected lines.
-
-literally exactly the same as the one that comes with aegi, idk why i made this
