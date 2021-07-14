@@ -1,7 +1,7 @@
 script_name="Scenebleed Detector"
 script_description="marks possible scenebleeds with an effect"
 script_author="garret"
-script_version="2021-07-06"
+script_version="2021-07-14"
 
 function main(sub, sel)
     local thresh = aegisub.frame_from_ms(500)
@@ -9,6 +9,7 @@ function main(sub, sel)
     -- tried to make config file work, failed, so shit's hardcoded
 
     local keyframes = aegisub.keyframes()
+    local bleed_count = 0
     for j,i in ipairs(sel) do
         line = sub[i]
         local start_frame = aegisub.frame_from_ms(line.start_time)
@@ -21,10 +22,12 @@ function main(sub, sel)
                 else
                     line.effect = line.effect.."; "..bleedstring
                 end
+                bleed_count = bleed_count + 1
                 sub[i] = line
             end
         end
     end
+    aegisub.log(bleed_count.." scenebleeds found.")
     aegisub.set_undo_point(script_name)
     return sel
 end
