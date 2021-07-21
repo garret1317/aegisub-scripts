@@ -17,6 +17,10 @@ Makes checking pre-timing possible by putting some text in the lines (the actor 
 
 ignores lines with text in them, prepends to lines with just tags in them
 
+### Append Comment
+
+pops up a dialogue to put the comment in, and appends it to the selected lines.
+
 ### Audio Clipper
 
 Extracts audio from the selected line(s), like the create audio clip button.
@@ -75,3 +79,7 @@ originally created to convert stuff that should've been alpha-timed in the first
 ### Scenebleed Detector
 
 Finds scenebleeds in the selected lines, and marks them with an effect (`bleed`).
+
+### Select Comments
+
+take a guess
