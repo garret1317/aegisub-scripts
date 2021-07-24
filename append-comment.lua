@@ -1,7 +1,7 @@
 script_name = "Append Comment"
-script_description = "ts do all the work pls kthxbye"
+script_description = "{ts do all the work pls kthxbye}"
 script_author = "garret"
-script_version = "1.0.0"
+script_version = "1.1.0"
 
 inspect = require 'inspect'
 function log(level, msg)
@@ -28,7 +28,7 @@ function main(sub, sel)
             label="Comment:"
         },
         {
-            class="textbox",name="msg",
+            class="edit",name="msg",
             x=0,y=1,width=1,height=2,
             value=""
         }
