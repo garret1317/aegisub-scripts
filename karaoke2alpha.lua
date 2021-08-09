@@ -1,5 +1,5 @@
 script_name="K-Timing -> Alpha Timing"
-script_description="does what it says on the tin."
+script_description="makes doing alpha timing significantly easier by getting rid of the part where you do alpha timing."
 script_author = "garret"
 script_version = "1.0.1"
 include("utils.lua")
