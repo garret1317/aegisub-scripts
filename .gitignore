@@ -1,0 +1,12 @@
+* (copy)* # normally for testing stuff without having to piss around with git to get it back to how it was
+# yes, i know that defeats the entire point of git, but i don't really care
+# i'm only using it as an easy-ish way to have everything in one place that other people can access
+
+# private stuff for specific purposes
+*seapega-cope-edition*
+bs-*
+
+# stuff that, for whatever reason, i've started but never finished
+# ranges from "notes in a text file", to "works perfectly but is horribly inefficient"
+# available on request if you really want them
+*.stalled.*
