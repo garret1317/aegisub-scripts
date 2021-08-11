@@ -52,12 +52,13 @@ function get_format(copy, format, custom)
 end
 
 function make_out_path(out_path)
+    local lfs = require "aegisub.lfs"
     if out_path == "" then
         err("Need an output path!")
     end
-    os.execute('mkdir "'..out_path..'"') -- if it doesn't exist, it makes it, and if it does, it errors.
-    return out_path -- either way, the path now exists. (probably)
-end -- I imagine there's a mkdir thing in lua that's better, but this works fine, so unless it breaks, i'll keep it like this.
+    lfs.mkdir(out_path)
+    return out_path
+end
 
 function extract_audio(in_path, start_time, end_time, out_path, name, extension, copy)
     if copy == true then
