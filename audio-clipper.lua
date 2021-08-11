@@ -1,18 +1,18 @@
 script_name = "Audio Clipper"
 script_description = "Extracts audio from the selected line(s).\nNeeds ffmpeg."
 script_author = "garret"
-script_version = "2021-04-10"
+script_version = "dev"
 
-a = aegisub
+aegi = aegisub
 
 function err(msg)
-    a.dialog.display({{class = "label", label = msg}}, {"OK"}, {close = "OK"})
-    a.cancel()
+    aegi.dialog.display({{class = "label", label = msg}}, {"OK"}, {close = "OK"})
+    aegi.cancel()
 end
 
 function get_vid_dir()
-    local aud_dir = a.decode_path("?audio")
-    local vid_dir = a.decode_path("?video")
+    local aud_dir = aegi.decode_path("?audio")
+    local vid_dir = aegi.decode_path("?video")
     if aud_dir ~= "?audio" then
         return aud_dir
     elseif vid_dir ~= "?video" then -- if there is not, in fact, a video
@@ -23,8 +23,8 @@ function get_vid_dir()
 end
 
 function get_vid()
-    local aud = a.project_properties().audio_file -- try get the audio first, if it's loaded separately
-    local vid = a.project_properties().video_file
+    local aud = aegi.project_properties().audio_file -- try get the audio first, if it's loaded separately
+    local vid = aegi.project_properties().video_file
     if aud ~= "" then
         return aud
     elseif vid ~= "" then
@@ -70,22 +70,22 @@ function extract_audio(in_path, start_time, end_time, out_path, name, extension,
 end
 
 function loop(subs, sel, in_path, out_path, extension, copy, delay)
-    a.progress.title("Extracting Audio")
+    aegi.progress.title("Extracting Audio")
     local progress = 0
     local progress_increment = 100 / #sel -- increment by this for every line, and the bar will eventually reach 100
     for x, i in ipairs(sel) do -- x is the position of the line in our selection, i is the position in the whole sub file
-        if a.progress.is_cancelled() then -- if you press the cancel button
-            a.cancel() -- it stops (mind-blowing, i know)
+        if aegi.progress.is_cancelled() then -- if you press the cancel button
+            aegi.cancel() -- it stops (mind-blowing, i know)
         end
-        a.progress.set(progress)
+        aegi.progress.set(progress)
         local line = subs[i]
         local start_time = line.start_time + delay
         local end_time = line.end_time + delay
-        a.progress.task("Extracting line "..x)
+        aegi.progress.task("Extracting line "..x)
         extract_audio(in_path, start_time, end_time, out_path, x, extension, copy)
         progress = progress + progress_increment
     end
-    a.progress.set(100) -- in case it didn't reach 100 on its own
+    aegi.progress.set(100) -- in case it didn't reach 100 on its own
 end
 
 
@@ -100,10 +100,10 @@ function gui(subs, sel)
     end
 
     local get_input={{class="label",x=0,y=0,label="Input's audio format:"},{class="dropdown",name="format",x=0,y=1,width=2,height=1,items={"AAC","Opus","FLAC","Custom"},value="Audio Format",hint="If you don't know, you should probably press \"Just make it FLAC\", or use mka."},{class="label",x=0,y=2,label="Custom Extension:"},{class="edit",name="custom",x=1,y=2,value="mka",hint="You'll probably be fine with mka, because matroska can contain pretty much anything"},{class="label",x=0,y=3,label="Delay (ms):"},{class="intedit",name="delay",x=1,y=3,value=0,hint="to prevent timing fuckery with weird raws"},{class="label",x=0,y=4,label="Input path:"},{class="edit",name="in_path",x=0,y=5,width=2,height=1,value=in_path,hint="where the audio comes from"},{class="label",x=0,y=6,label="Output path (will be created if it doesn't already exist):"},{class="edit",name="out_path",x=0,y=7,width=2,height=1,value=out_path,hint="where the audio goes"}}
-    local pressed, results = a.dialog.display(get_input, {"Cancel", "OK", "Just make it FLAC"})
+    local pressed, results = aegi.dialog.display(get_input, {"Cancel", "OK", "Just make it FLAC"})
     -- there's probably something that can detect the format automatically, but I do not know what it is.
     if pressed == "Cancel" then
-        a.cancel()
+        aegi.cancel()
     elseif pressed == "OK" then
         do_copy = true
     elseif pressed == "Just make it FLAC" then
@@ -126,5 +126,5 @@ function non_gui(subs, sel) -- no gui, so you can bind it to a hotkey
  -- sets sane defaults (takes the audio from the video file, and outputs to /the/video/dir/audioclipper_output/. transcodes to flac. no delay)
 end
 
-a.register_macro(script_name, script_description, gui)
-a.register_macro(": Non-GUI macros :/"..script_name..": Just make it FLAC", script_description, non_gui) -- same section as unanimated's scripts
+aegi.register_macro(script_name, script_description, gui)
+aegi.register_macro(": Non-GUI macros :/"..script_name..": Just make it FLAC", script_description, non_gui) -- same section as unanimated's scripts
