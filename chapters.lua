@@ -1,7 +1,7 @@
 script_name = "Chapter Generator"
 script_description = "makes chapters"
 script_author = "garret"
-script_version = "2021-04-25"
+script_version = "2.0.0-dev"
 
 language = "eng"
 language_ietf = "en"
@@ -34,8 +34,13 @@ function get_sane_path()
     elseif audio_path ~= "?audio" then
         return audio_path
     else
-        return nil
+        return ""
     end
+end
+
+function get_user_path(sane_path)
+    local path = aegisub.dialog.save("Save Chapter File", sane_path, "chapters.xml", "XML files (.xml)|.xml|All Files (.)|.", false)
+    return path
 end
 
 function main(sub)
@@ -60,14 +65,15 @@ function main(sub)
         chapters = chapters.."    <ChapterAtom>\n      <ChapterTimeStart>"..humantime.."</ChapterTimeStart>\n      <ChapterDisplay>\n        <ChapterString>"..name.."</ChapterString>\n        <ChapLanguageIETF>"..language_ietf.."</ChapLanguageIETF>\n        <ChapterLanguage>"..language.."</ChapterLanguage>\n      </ChapterDisplay>\n    </ChapterAtom>\n"
     end
     chapters = chapters.."  </EditionEntry>\n</Chapters>"
-    path = get_sane_path()
+    sane_path = get_sane_path()
+    path = get_user_path(sane_path)
     if path ~= nil then
-        local chapfile = io.open(path.."/chapters.xml", "w")
+        local chapfile = io.open(path, "w")
 	    chapfile:write(chapters)
         chapfile:close()
-        aegisub.log("saved to "..path.."/chapters.xml")
+        aegisub.log("saved to "..path)
     else
-        aegisub.log("<!-- couldn't find anywhere to save chapters, logging here - select everything below this message and copy+paste into a .xml file -->\n\n")
+        aegisub.log("<!-- Chapters not saved, logging here - select everything below this message and copy+paste into a .xml file -->\n\n")
         aegisub.log(chapters)
     end
 end
