@@ -39,7 +39,7 @@ function get_sane_path()
 end
 
 function get_user_path(default_dir)
-    local path = aegisub.dialog.save("Save Chapter File", default_dir, "chapters.xml", "XML files (.xml)|.xml|All Files (.)|.", false)
+    local path = aegisub.dialog.save("Save Chapter File", default_dir, "chapters.xml", "XML files|*.xml|All Files|*", false)
     return path
 end
 
