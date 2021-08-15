@@ -57,15 +57,8 @@ For fancy fade effects. (i.e, when the whole scene blurs out until it's invisibl
 
 Makes XML chapters for matroska.
 
-Makes lines with the effect `chapter` into chapters. Start time of the line is used for the timestamp, text of the line is used for chapter name.
+Makes lines with the effect `[Cc]hapter`, `[Cc]hptr` or `[Cc]hap` (the same as UA's Significance), into chapters. Start time of the line is used for the timestamp, text of the line is used for chapter name.
 Language is currently hardcoded to english.
-
-Tries to save the file in a sane location.
- in order of priority: subtitle directory, video directory, audio directory.
-
-file is always named `chapters.xml`, **even if something is already there.**
-
-if no sane path is found, it logs the chapters for you to deal with as you see fit.
 
 **Done better by**: `Significance` by UA.
 
@@ -73,10 +66,8 @@ if no sane path is found, it logs the chapters for you to deal with as you see f
 
 `become-fansubber.lua`
 
-`Main` -> `Default`,
- `Flashback` -> `Default`,
- `Top` -> `\an8`,
- `Italics` -> `\i1`.
+Changes style of selected lines to `Default` (for now),
+ and copies italic+alignment values from cr's styles to inline tags.
 
 assumes a relatively clean cr script.
  if not, you're on your own.
