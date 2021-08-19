@@ -1,23 +1,7 @@
 script_name = "Append Comment"
 script_description = "{ts do all the work pls kthxbye}"
 script_author = "garret"
-script_version = "1.1.0"
-
-inspect = require 'inspect'
-function log(level, msg)
-    if type(level) ~= "number" then
-        msg = level
-        level = 4
-    end
-    if type(msg) == "table" then
-        msg = inspect(msg)
-    end
-    aegisub.log(level, tostring(msg).."\n")
-end
-
-function clean(msg)
-msg = msg:gsub("\n","\\N")
-end
+script_version = "1.1.1"
 
 function main(sub, sel)
     dialog_config=
@@ -35,10 +19,9 @@ function main(sub, sel)
     }
     button, results = aegisub.dialog.display(dialog_config)
     if button ~= false then
-        msg = results.msg
         for _, i in ipairs(sel) do
             local line = sub[i]
-            line.text = line.text.." {"..msg.."}"
+            line.text = line.text.." {"..results.msg.."}"
             sub[i] = line
         end
     else
