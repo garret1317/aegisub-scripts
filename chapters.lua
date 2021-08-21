@@ -7,11 +7,11 @@ language = "eng"
 language_ietf = "en"
 
 function ms_to_human(start) -- From Significance
-    timecode=math.floor(start/1000)
-    tc1=math.floor(timecode/60)
-    tc2=timecode%60
-    tc3=start%1000
-    tc4="00"
+    local timecode=math.floor(start/1000)
+    local tc1=math.floor(timecode/60)
+    local tc2=timecode%60
+    local tc3=start%1000
+    local tc4="00"
     if tc2==60 then tc2=0 tc1=tc1+1 end
     if tc1>119 then tc1=tc1-120 tc4="02" end
     if tc1>59 then tc1=tc1-60 tc4="01" end
@@ -72,10 +72,8 @@ function main(sub)
         local chapfile = io.open(path, "w")
 	    chapfile:write(chapters)
         chapfile:close()
-        aegisub.log("saved to "..path)
     else
-        aegisub.log("<!-- Chapters not saved, logging here - select everything below this message and copy+paste into an xml file -->\n\n")
-        aegisub.log(chapters)
+        aegisub.cancel()
     end
 end
 
