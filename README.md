@@ -62,16 +62,6 @@ Language is currently hardcoded to english.
 
 **Done better by**: `Significance` by UA.
 
-### CR Restyler
-
-`become-fansubber.lua`
-
-Changes style of selected lines to `Default` (for now),
- and copies italic+alignment values from cr's styles to inline tags.
-
-assumes a relatively clean cr script.
- if not, you're on your own.
-
 ### Dupe and Comment
 
 Duplicates a line and comments out the original.
@@ -96,6 +86,16 @@ makes doing alpha timing significantly easier
 
 originally created to convert stuff that should've been alpha timed in the first place
  but used a weird hack with `\ko` instead.
+
+### Restyler
+
+`become-fansubber.lua`
+
+Changes style of selected lines to `Default` (for now, will be configurable in future),
+ and copies italic+alignment values from the script's styles to inline tags.
+
+Can't help if the source script isn't properly styled.
+**cannot handle inline tags!**
 
 ### Scenebleed Detector
 

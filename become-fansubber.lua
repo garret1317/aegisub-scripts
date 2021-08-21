@@ -1,4 +1,4 @@
-script_name="CR Restyler"
+script_name="Restyler"
 script_description="become a fansubber with a click of a button"
 script_author = "garret"
 script_version = "2.0.0-dev"
@@ -35,14 +35,13 @@ function get_new(old, new)
 end
 
 function main(sub, sel)
-    local _, styles = karaskel.collect_head(sub) -- i'd like to not have it log if possible
+    local _, styles = karaskel.collect_head(sub, false)
     local new_style_name = "Default" -- the one we'll be changing stuff to - TODO: configurable
     local new_style = styles[new_style_name]
 	for h, i in ipairs(sel) do
-        -- maybe don't do if the style has "sign" in the name?
-            -- need proper list of stuff cr uses
+        -- TODO: automatically exclude styles (also configurable)
 		local line = sub[i]
-        local old_style = styles[line.style]
+        local old_style = styles[line.style] -- reinventing the wheel a bit here, since karaskel can do this with preproc_line_size (line.styleref), but it also adds loads of other crap we don't care about for the same functionality in the end, so ¯\_(ツ)_/¯
         local italic = get_new(old_style.italic, new_style.italic)
         local align = get_new(old_style.align, new_style.align)
         line.style = new_style_name
