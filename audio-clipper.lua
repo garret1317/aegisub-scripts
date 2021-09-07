@@ -1,7 +1,7 @@
 script_name = "Audio Clipper"
 script_description = "Extracts audio from the selected line(s).\nNeeds ffmpeg."
 script_author = "garret"
-script_version = "dev"
+script_version = "1.1.2"
 
 aegi = aegisub
 

@@ -10,3 +10,6 @@ bs-*
 # ranges from "notes in a text file", to "works perfectly but is horribly inefficient"
 # available on request if you really want them
 *.stalled.*
+
+# me reading crap in browser with pandoc
+*.html
