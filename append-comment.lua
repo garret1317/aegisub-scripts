@@ -1,7 +1,7 @@
 script_name = "Append Comment"
 script_description = "{ts do all the work pls kthxbye}"
 script_author = "garret"
-script_version = "1.1.1"
+script_version = "1.1.2"
 
 function main(sub, sel)
     dialog_config=
@@ -17,6 +17,9 @@ function main(sub, sel)
             value=""
         }
     }
+    if #sel == 1 then
+        table.insert(dialog_config, {class="label",x=0,y=3,width=1,height=1,label="if you're not using this for multiple lines \nyou may as well just type it out yourself"})
+    end
     button, results = aegisub.dialog.display(dialog_config)
     if button ~= false then
         for _, i in ipairs(sel) do
