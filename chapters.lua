@@ -1,7 +1,7 @@
 script_name = "Chapter Generator"
 script_description = "Makes XML chapters for matroska."
 script_author = "garret"
-script_version = "2.0.0-dev"
+script_version = "2.0.0"
 
 language = "eng"
 language_ietf = "en"

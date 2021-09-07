@@ -1,12 +1,12 @@
 script_name="Restyler"
 script_description="become a fansubber with a click of a button"
 script_author = "garret"
-script_version = "2.0.0-dev"
+script_version = "2.0.0"
 
 include("karaskel.lua")
 include("cleantags.lua")
 
--- TODO: detect already existing tags
+-- TODO: detect pre-existing inline tags
     -- probably need some kind of ass parsing, or a hack with match()
 
 function add_tags(txt, italic, align) -- everything except txt is boolean. nil = don't change, !nil = change to this value
