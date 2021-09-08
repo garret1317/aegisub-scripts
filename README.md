@@ -45,14 +45,6 @@ Can be slow.
 
 **Done better by**: Petzku's `Encode Clip` (kinda), Aegisub (kinda)
 
-### Blur Fade
-
-Makes fade with blur.
-
-Blurs out lines with the effect `blurout`, and blurs in lines with the effect `blurin`.
-
-For fancy fade effects. (i.e, when the whole scene blurs out until it's invisible, as a transition)
-
 ### Chapter Generator
 
 Makes XML chapters for matroska.
