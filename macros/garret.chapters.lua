@@ -1,10 +1,28 @@
 script_name = "Chapter Generator"
 script_description = "Makes XML chapters for matroska."
 script_author = "garret"
-script_version = "2.0.0"
+script_version = "2.1.0"
+script_namespace = "garret.chapters"
 
-language = "eng"
-language_ietf = "en"
+local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
+local simpleconf, config_dir
+
+if haveDepCtrl then
+    depctrl = DependencyControl {
+        --feed="TODO",
+        {
+            {"garret.simpleconf", url="https://github.com/garret1317/aegisub-scripts",}
+             --feed="TODO"},
+        }
+    }
+    simpleconf = depctrl:requireModules()
+    config_dir = depctrl.configDir
+else
+    simpleconf = require 'garret.simpleconf'
+    config_dir = "?user/config"
+end
+
+local config = simpleconf.get_config(aegisub.decode_path(config_dir.."/"..script_namespace..".conf"), {language = "eng", language_ietf = "en"})
 
 function ms_to_human(start) -- From Significance
     local timecode=math.floor(start/1000)
@@ -44,6 +62,7 @@ function get_user_path(default_dir)
 end
 
 function main(sub)
+    aegisub.log(config_dir)
     local times = {}
     local names = {}
     for i=1,#sub do
@@ -63,7 +82,7 @@ function main(sub)
     for j, k in ipairs(times) do
         local humantime = ms_to_human(k)
         local name = names[j]
-        chapters = chapters.."    <ChapterAtom>\n      <ChapterTimeStart>"..humantime.."</ChapterTimeStart>\n      <ChapterDisplay>\n        <ChapterString>"..name.."</ChapterString>\n        <ChapLanguageIETF>"..language_ietf.."</ChapLanguageIETF>\n        <ChapterLanguage>"..language.."</ChapterLanguage>\n      </ChapterDisplay>\n    </ChapterAtom>\n"
+        chapters = chapters.."    <ChapterAtom>\n      <ChapterTimeStart>"..humantime.."</ChapterTimeStart>\n      <ChapterDisplay>\n        <ChapterString>"..name.."</ChapterString>\n        <ChapLanguageIETF>"..config.language_ietf.."</ChapLanguageIETF>\n        <ChapterLanguage>"..config.language.."</ChapterLanguage>\n      </ChapterDisplay>\n    </ChapterAtom>\n"
     end
     chapters = chapters.."  </EditionEntry>\n</Chapters>"
     sane_path = get_sane_path()
@@ -77,4 +96,8 @@ function main(sub)
     end
 end
 
-aegisub.register_macro(script_name, script_description, main)
+if haveDepCtrl then
+    depctrl:registerMacro(main)
+else
+    aegisub.register_macro(script_name, script_description, main)
+end

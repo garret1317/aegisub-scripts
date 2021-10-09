@@ -1,10 +1,26 @@
 script_name="Restyler"
 script_description="become a fansubber with a click of a button"
 script_author = "garret"
-script_version = "2.0.0"
+script_version = "2.1.0"
+script_namespace = "garret.restyler"
 
-include("karaskel.lua")
-include("cleantags.lua")
+local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
+local simpleconf
+if haveDepCtrl then
+    depctrl = DependencyControl {
+        --feed="TODO",
+        {"karaskel", "cleantags", {"garret.simpleconf", url="https://github.com/garret1317/aegisub-scripts"}, }
+    }
+    kara, clean, simpleconf = depctrl:requireModules()
+    config_dir = depctrl.configDir
+else
+    include("karaskel.lua")
+    include("cleantags.lua")
+    simpleconf = require 'garret.simpleconf'
+    config_dir = "?user/config"
+end
+
+local config = simpleconf.get_config(aegisub.decode_path(config_dir.."/"..script_namespace..".conf"), {new_style = "Default"})
 
 -- TODO: detect pre-existing inline tags
     -- probably need some kind of ass parsing, or a hack with match()
@@ -36,19 +52,23 @@ end
 
 function main(sub, sel)
     local _, styles = karaskel.collect_head(sub, false)
-    local new_style_name = "Default" -- the one we'll be changing stuff to - TODO: configurable
-    local new_style = styles[new_style_name]
+    --local config.new_style = "Default" -- the one we'll be changing stuff to - TODO: configurable
+    local new_style = styles[config.new_style]
 	for h, i in ipairs(sel) do
         -- TODO: automatically exclude styles (also configurable)
 		local line = sub[i]
         local old_style = styles[line.style] -- reinventing the wheel a bit here, since karaskel can do this with preproc_line_size (line.styleref), but it also adds loads of other crap we don't care about for the same functionality in the end, so ¯\_(ツ)_/¯
         local italic = get_new(old_style.italic, new_style.italic)
         local align = get_new(old_style.align, new_style.align)
-        line.style = new_style_name
+        line.style = config.new_style
         line.text = add_tags(line.text, italic, align)
 		sub[i] = line
 	end
 	aegisub.set_undo_point(script_name)
 end
 
-aegisub.register_macro(script_name, script_description, main)
+if haveDepCtrl then
+    depctrl:registerMacro(main)
+else
+    aegisub.register_macro(script_name, script_description, main)
+end

@@ -1,9 +1,17 @@
 script_name = "Append Comment"
 script_description = "{ts do all the work pls kthxbye}"
 script_author = "garret"
-script_version = "1.1.2"
+script_version = "1.2.0"
+script_namespace = "garret.append-comment"
 
-function main(sub, sel)
+local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
+if haveDepCtrl then
+    depctrl = DependencyControl {
+        --feed="TODO",
+    }
+end
+
+local function main(sub, sel)
     dialog_config=
     {
         {
@@ -13,7 +21,7 @@ function main(sub, sel)
         },
         {
             class="edit",name="msg",
-            x=0,y=1,width=1,height=2,
+            x=0,y=1,width=3,height=2,
             value=""
         }
     }
@@ -32,4 +40,8 @@ function main(sub, sel)
     end
 end
 
-aegisub.register_macro(script_name, script_description, main)
+if haveDepCtrl then
+    depctrl:registerMacro(main)
+else
+    aegisub.register_macro(script_name, script_description, main)
+end

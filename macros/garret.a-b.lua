@@ -1,7 +1,14 @@
 script_name = "A-B"
 script_description = "makes checking pre-timing possible."
 script_author = "garret"
-script_version = "2021-07-10"
+script_version = "2.1.0"
+
+local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
+if haveDepCtrl then
+    depctrl = DependencyControl {
+        --feed="TODO",
+    }
+end
 
 function switch_number(i)
     if i == "a" then
@@ -31,4 +38,8 @@ function main(sub, sel)
     aegisub.set_undo_point(script_name)
 end
 
-aegisub.register_macro(script_name, script_description, main)
+if haveDepCtrl then
+    depctrl:registerMacro(main)
+else
+    aegisub.register_macro(script_name, script_description, main)
+end

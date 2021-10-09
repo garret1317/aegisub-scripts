@@ -1,22 +1,20 @@
-script_name="K-Timing -> Alpha Timing"
-script_description="makes doing alpha timing significantly easier by getting rid of the part where you do alpha timing."
+script_name = "K-Timing -> Alpha Timing"
+script_description = "makes doing alpha timing significantly easier by getting rid of the part where you do alpha timing."
 script_author = "garret"
-script_version = "1.0.1"
-include("utils.lua")
+script_version = "1.1.0"
+script_namespace = "garret.karaoke2alpha"
 
--- logging stuff, for testing
---[[inspect = require 'inspect' -- luarocks install inspect
-function log(level, msg)
-    if type(level) ~= "number" then -- if no actual level provided
-        msg = level -- set the non-level as the message
-        level = 4 -- set log level - i'm using this for debugging, so 4 is relatively sane imo
-    end
-    if type(msg) == "table" then
-        msg = inspect(msg) -- actually see what's in the table
-    end
-    aegisub.log(level, tostring(msg) .. "\n")
-end]]
--- i should really put this stuff in a separate file or something but cba
+local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
+local util
+if haveDepCtrl then
+    depctrl = DependencyControl {
+        --feed="TODO",
+        {"aegisub.util"}
+    }
+    util = depctrl:requireModules()
+else
+    util = require 'aegisub.util'
+end
 
 function get_visible(parsed_line, index)
     local res = ""
@@ -65,4 +63,8 @@ function main(sub, sel)
     aegisub.set_undo_point(script_name)
 end
 
-aegisub.register_macro(script_name, script_description, main)
+if haveDepCtrl then
+    depctrl:registerMacro(main)
+else
+    aegisub.register_macro(script_name, script_description, main)
+end
