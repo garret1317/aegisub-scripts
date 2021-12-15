@@ -60,10 +60,10 @@ end
 
 function extract_audio(in_path, start_time, end_time, out_path, name, extension, copy)
     if copy == true then
-        os.execute('ffmpeg -i "'..in_path..'" -codec copy -vn -ss '..start_time..'ms -to '..end_time..'ms "'..out_path..name..'.'..extension..'" -y')
+        os.execute('ffmpeg -ss '..start_time..'ms -to '..end_time..'ms -i "'..in_path..'" -codec copy -vn "'..out_path..name..'.'..extension..'" -y')
      -- takes the video as input, copies the streams, but doesn't include video. sets it to start at the start of the selection, and end at the end of it. outputs to our chosen out path with our chosen name and extension. overwrites anything with the same name.
     elseif copy == false then
-        os.execute('ffmpeg -i "'..in_path..'" -vn -ss '..start_time..'ms -to '..end_time..'ms "'..out_path..name..'.'..extension..'" -y')
+        os.execute('ffmpeg -ss '..start_time..'ms -to '..end_time..'ms -i "'..in_path..'" -vn "'..out_path..name..'.'..extension..'" -y')
      -- same as above, but doesn't copy the stream (transcodes to flac)
     end
 end
