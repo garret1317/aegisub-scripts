@@ -10,6 +10,8 @@ Some scripts do the same things as other peoples',
 Tested on official-ish aegi for linux,
  but _should_ work fine on any build that has automation v4 (read: all of them).
 
+assume garbage-in garbage-out.
+
 ----
 
 ## Script List
@@ -78,6 +80,14 @@ makes doing alpha timing significantly easier
 
 originally created to convert stuff that should've been alpha timed in the first place
  but used a weird hack with `\ko` instead.
+
+### Order layers
+
+for typesetting.
+
+Puts each selected line on its own layer, so they don't clash.
+Tries to be a bit clever and check if you actually need it
+, but it's not so clever that it'll check if they actually overlap.
 
 ### Restyler
 
