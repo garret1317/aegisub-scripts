@@ -73,6 +73,20 @@ I do not have an em-dash key on my keyboard.
 
 **Done better by**: Ctrl-H (partially)
 
+### Inverse Glow
+
+For typesetting.
+
+Glow, but it goes inside the letters.
+
+- `\c` = dark colour
+- `\3c` = light colour
+- `\bord` = amount of blur on light colour
+
+won't work if doesn't have all three
+
+see `inverse-glow.ass` for an example
+
 ### K-Timing -> Alpha Timing
 
 makes doing alpha timing significantly easier
