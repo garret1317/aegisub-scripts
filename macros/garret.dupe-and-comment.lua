@@ -1,20 +1,25 @@
 script_name="Dupe and Comment"
 script_description="Copies a line and comments out the original.\nbecause i like seeing the original while editing, and being able to go back to it easily"
 script_author = "garret"
-script_version = "2.1.0"
+script_version = "2.2.0"
 script_namespace = "garret.dupe-and-comment"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
 local util
+local json
 if haveDepCtrl then
     depctrl = DependencyControl {
         --feed="TODO",
-        {"aegisub.util"}
+        {"aegisub.util"},
+        {"json"}
     }
-    util = depctrl:requireModules()
+    util, json = depctrl:requireModules()
 else
     util = require 'aegisub.util'
+
 end
+json = require 'json' -- TODO: attempt to index upvalue 'json' (a nil value)
+--inspect = require 'inspect'
 
 function comment(subs, sel)
     for i=#sel,1,-1 do
@@ -40,9 +45,36 @@ function undo(subs, sel)
     aegisub.set_undo_point("Undo "..script_name)
 end
 
+local function hide(subs, sel)
+    for i=#sel,1,-1 do
+        local edit=subs[sel[i]]
+        local original=subs[sel[i]+1]
+        edit.extra = {d_c_line = json.encode(original)}
+        subs.delete(sel[i]+1)
+        subs[sel[i]] = edit
+    end
+    aegisub.set_undo_point(script_name)
+end
+
+local function unhide(subs, sel)
+    for i=#sel,1,-1 do
+        local edit=subs[sel[i]]
+        if edit.extra then
+            original = json.decode(edit.extra["d_c_line"])
+            --aegisub.log(inspect(original))
+            subs.insert(sel[i]+1, original)
+            edit.extra.d_c_line = nil
+            subs[sel[i]] = edit
+        end
+    end
+    aegisub.set_undo_point(script_name)
+end
+
 local macros = {
     {"Do", script_description, comment},
-    {"Undo","Deletes selected line and restores the original", undo}
+    {"Undo","Deletes selected line and restores the original", undo},
+    {"Hide","Hides the original in extradata", hide},
+    {"Unhide","Restores the original from extradata", unhide}
 }
 if haveDepCtrl then
     depctrl:registerMacros(macros)
