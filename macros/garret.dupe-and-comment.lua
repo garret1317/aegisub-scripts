@@ -53,7 +53,7 @@ local function hide(subs, sel)
     for i=#sel,1,-1 do
         local edit=subs[sel[i]]
         local original=subs[sel[i]+1]
-        edit.extra = {d_c_line = json.encode(original)}
+        edit.extra.dupencom = json.encode(original)
         subs.delete(sel[i]+1)
         subs[sel[i]] = edit
     end
@@ -62,13 +62,18 @@ end
 
 local function unhide(subs, sel)
     for i=#sel,1,-1 do
-        local edit=subs[sel[i]]
-        if edit.extra then
-            original = json.decode(edit.extra["d_c_line"])
-            --aegisub.log(inspect(original))
-            subs.insert(sel[i]+1, original)
-            edit.extra.d_c_line = nil
-            subs[sel[i]] = edit
+        local j = 0
+        while true do
+            local edit=subs[sel[i] + j]
+            if edit.extra.dupencom ~= nil then
+                original = json.decode(edit.extra.dupencom)
+                edit.extra.dupencom = nil
+                subs[sel[i]+j] = edit
+                j = j + 1
+                subs.insert(sel[i]+j, original)
+            else
+                break
+            end
         end
     end
     aegisub.set_undo_point(script_name)
