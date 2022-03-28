@@ -82,9 +82,13 @@ end
 local macros = {
     {"Do", script_description, comment},
     {"Undo","Deletes selected line and restores the original", undo},
-    {"Hide","Hides the original in extradata", hide},
-    {"Unhide","Restores the original from extradata", unhide}
 }
+
+if json ~= nil then  -- dont lock out core functionality because you dont have this one thing
+        table.insert(macros, {"Cleanup/Do","Hides the original in extradata", hide})
+        table.insert(macros, {"Cleanup/Undo","Restores the original from extradata", unhide})
+end
+
 if haveDepCtrl then
     depctrl:registerMacros(macros)
 else
