@@ -5,20 +5,24 @@ script_version = "2.2.0"
 script_namespace = "garret.dupe-and-comment"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
-local util
-local json
+local util, json
+
 if haveDepCtrl then
     depctrl = DependencyControl {
         --feed="TODO",
-        {"aegisub.util"},
-        {"json"}
+        {
+            {"aegisub.util"},
+            {"json"}
+        }
     }
     util, json = depctrl:requireModules()
 else
     util = require 'aegisub.util'
-
+    local _
+    _, json = pcall(require, 'json') -- if you have depctrl, you have json, but even if you don't, you might have it anyway so worth checking
+    _ = nil
 end
-json = require 'json' -- TODO: attempt to index upvalue 'json' (a nil value)
+
 --inspect = require 'inspect'
 
 function comment(subs, sel)
