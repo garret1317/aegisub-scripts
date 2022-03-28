@@ -57,7 +57,7 @@ local function hide(subs, sel)
         subs.delete(sel[i]+1)
         subs[sel[i]] = edit
     end
-    aegisub.set_undo_point(script_name)
+    aegisub.set_undo_point("Hide comments")
 end
 
 local function unhide(subs, sel)
@@ -76,7 +76,7 @@ local function unhide(subs, sel)
             end
         end
     end
-    aegisub.set_undo_point(script_name)
+    aegisub.set_undo_point("Unhide comments")
 end
 
 local macros = {
