@@ -54,12 +54,10 @@ local function hide(subs, sel)
     for i = #sel, 1, -1 do
         local orig = subs[sel[i]]
         if orig.comment then
-            edit = subs[sel[i] - 1]
+            local edit = subs[sel[i] - 1]
             edit.extra.dupencom = json.encode(orig)
             subs[sel[i] - 1] = edit
             subs.delete(sel[i])
-        else
-            break
         end
     end
     aegisub.set_undo_point("Hide comments")
