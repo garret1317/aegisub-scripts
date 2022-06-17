@@ -5,24 +5,16 @@ script_version = "2.1.0"
 script_namespace = "garret.chapters"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
-local simpleconf, config_dir
 
 if haveDepCtrl then
     depctrl = DependencyControl {
         --feed="TODO",
-        {
-            {"garret.simpleconf", url="https://github.com/garret1317/aegisub-scripts",}
-             --feed="TODO"},
-        }
     }
-    simpleconf = depctrl:requireModules()
-    config_dir = depctrl.configDir
-else
-    simpleconf = require 'garret.simpleconf'
-    config_dir = "?user/config"
 end
 
-local config = simpleconf.get_config(aegisub.decode_path(config_dir.."/"..script_namespace..".conf"), {language = "eng", language_ietf = "en"})
+--local config = simpleconf.get_config(aegisub.decode_path(config_dir.."/"..script_namespace..".conf"), {language = "eng", language_ietf = "en"})
+local config = {language = "eng", language_ietf = "en"}
+
 
 function ms_to_human(start) -- From Significance
     local timecode=math.floor(start/1000)
@@ -62,7 +54,6 @@ function get_user_path(default_dir)
 end
 
 function main(sub)
-    aegisub.log(config_dir)
     local times = {}
     local names = {}
     for i=1,#sub do

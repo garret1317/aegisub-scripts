@@ -5,22 +5,19 @@ script_version = "2.1.0"
 script_namespace = "garret.restyler"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
-local simpleconf
+local karaskel, cleantags
 if haveDepCtrl then
     depctrl = DependencyControl {
         --feed="TODO",
-        {"karaskel", "cleantags", {"garret.simpleconf", url="https://github.com/garret1317/aegisub-scripts"}, }
+        {"karaskel", "cleantags"}
     }
-    kara, clean, simpleconf = depctrl:requireModules()
-    config_dir = depctrl.configDir
+    kara, clean = depctrl:requireModules()
 else
     include("karaskel.lua")
     include("cleantags.lua")
-    simpleconf = require 'garret.simpleconf'
-    config_dir = "?user/config"
 end
 
-local config = simpleconf.get_config(aegisub.decode_path(config_dir.."/"..script_namespace..".conf"), {new_style = "Default"})
+-- local config = simpleconf.get_config(aegisub.decode_path(config_dir.."/"..script_namespace..".conf"), {new_style = "Default"})
 
 -- TODO: detect pre-existing inline tags
     -- probably need some kind of ass parsing, or a hack with match()
@@ -52,7 +49,7 @@ end
 
 function main(sub, sel)
     local _, styles = karaskel.collect_head(sub, false)
-    --local config.new_style = "Default" -- the one we'll be changing stuff to - TODO: configurable
+    local config.new_style = "Default"
     local new_style = styles[config.new_style]
 	for h, i in ipairs(sel) do
         -- TODO: automatically exclude styles (also configurable)
