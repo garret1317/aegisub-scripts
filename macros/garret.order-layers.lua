@@ -1,7 +1,8 @@
 script_name = "Order layers"
 script_description = "puts each selected line on its own layer so they don't clash"
 script_author = "garret"
-script_version = "1.0.0"
+script_version = "1.0.1"
+script_namespace = "garret.order-layers"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
 if haveDepCtrl then
