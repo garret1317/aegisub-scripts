@@ -1,7 +1,7 @@
 script_name="DepCtrl Global Config"
 script_description="the future is now"
 script_author = "garret"
-script_version = "1.0.0"
+script_version = "1.0.1"
 script_namespace = "garret.depctrl_config"
 
 local DependencyControl = require("l0.DependencyControl")
@@ -10,8 +10,6 @@ local depctrl = DependencyControl {
     {"json"}
 }
 local json = depctrl:requireModules()
-
-local inspect = require 'inspect'
 
 local function get_bool(field, default) -- can't just do `field or default`, because the default might be true when field is false
     if field == nil then
