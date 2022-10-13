@@ -3,7 +3,7 @@
 Aegisub automation scripts I've written.
 Nothing cool and exciting here, just little utilities that make my life easier.
 
-I write and use these on [Aegisub/Aegisub](https://github.com/Aegisub/Aegisub) on Linux ([this PPA](https://launchpad.net/~riccetn/+archive/ubuntu/aegisub)), but they should work perfectly fine wherever, I don't think there's anything OS-specific in there.
+I write and use these on [arch1t3cht's fork](https://github.com/arch1t3cht/Aegisub/) on Linux (previously aegisub mainline), but they should work perfectly fine wherever, I don't think there's anything OS or fork-specific in there.
 
 One day I'll get round to sorting out a DependencyControl feed. If you're reading this, that day has not yet come.
 
