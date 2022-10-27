@@ -1,6 +1,6 @@
 script_name = "consistency assistant"
 script_description = "ctrl-c ctrl-v"
-script_version = "1.0.0"
+script_version = "1.1.0"
 script_author = "garret"
 script_namespace = "garret.ctrl-c-ctrl-v"
 
@@ -18,14 +18,17 @@ local function main(sub, sel)
 		local line = sub[i]
 		if line.class == "dialogue" then
 			if line.comment ~= true then
-				if line.effect:match("ctrl%-c") then
-					aegisub.log(5, "ctrl-c: " .. line.text .. "\n")
-					table.insert(src, line)
-				elseif line.effect:match("ctrl%-v") then
-					aegisub.log(5, "ctrl-v: " .. line.text .. "\n")
-					line.text = src[1].text
+				local copy_name = line.effect:match("ctrl%-c ?([%S]*)")
+				local paste_name = line.effect:match("ctrl%-v ?([%S]*)")
+				if copy_name ~= nil then
+					aegisub.log(5, "ctrl-c " .. copy_name .. ": " .. line.text .. "\n")
+					src[copy_name] = src[copy_name] or {}
+					table.insert(src[copy_name], line)
+				elseif paste_name ~= nil then
+					aegisub.log(5, "ctrl-v " .. paste_name .. ": " .. line.text .. "\n")
+					line.text = src[paste_name][1].text
 					sub[i] = line
-					table.remove(src, 1)
+					table.remove(src[paste_name], 1)
 				end
 			end
 		end
