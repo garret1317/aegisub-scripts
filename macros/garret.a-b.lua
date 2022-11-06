@@ -1,7 +1,8 @@
 script_name = "A-B"
 script_description = "makes checking pre-timing possible."
 script_author = "garret"
-script_version = "2.1.0"
+script_version = "2.1.1"
+script_namespace = "garret.a-b"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
 if haveDepCtrl then
