@@ -62,10 +62,9 @@ local function get_human_filesize(bytes)
     return bytes
 end
 
-local defaults = {updaterEnabled = true, updateInterval = 302400, traceLevel = 3, extraFeeds = { }, tryAllFeeds = false, dumpFeeds = true, configDir = "?user/config", logMaxFiles = 200, logMaxAge = 604800, logMaxSize = 10 * (10 ^ 6), updateWaitTimeout = 60, updateOrphanTimeout = 600, logDir = "?user/log", writeLogs = true}
-
 local function get_config(data)
     local config = data.config
+    local defaults = {updaterEnabled = true, updateInterval = 302400, traceLevel = 3, extraFeeds = { }, tryAllFeeds = false, dumpFeeds = true, configDir = "?user/config", logMaxFiles = 200, logMaxAge = 604800, logMaxSize = 10 * (10 ^ 6), updateWaitTimeout = 60, updateOrphanTimeout = 600, logDir = "?user/log", writeLogs = true}
     local dialog = {
         {   class="checkbox", name="updaterEnabled",
             x=0,y=0,width=2,height=1,
@@ -148,28 +147,43 @@ local function get_config(data)
     elseif pressed == "Reset" then
 	    return {}
     end
-    res.traceLevel = tonumber(res.traceLevel:match("^(%d)"))
+    res.traceLevel = tonumber(res.traceLevel:sub(1, 1))
     res.updateInterval = human_to_seconds(res.updateInterval)
     res.logMaxAge = human_to_seconds(res.logMaxAge)
     return res
 end
 
-local function main()
-    local data_path = depctrl:getConfigFileName()
-    data_path = data_path:gsub(script_namespace, "l0.DependencyControl")
-    aegisub.log(4, "config file: "..data_path.."\n")
-
-    local data_file = io.open(data_path, "r")
-    local data = json.decode(data_file:read())
-    data_file:close()
-
-    data.config = get_config(data)
-    local data_str = json.encode(data)
-
-    data_file = io.open(data_path, "w")
-    data_file:write(data_str)
-    data_file:close()
-    aegisub.log(3, "Done. You'll need to rescan your automation directory, or restart aegisub, for the changes to take effect.")
+local function read_json(path)
+    local file = io.open(path, "r")
+    local json = json.decode(file:read())
+    file:close()
+    return json
 end
 
-depctrl:registerMacro("DependencyControl/Global Configuration", "Lets you change DependencyControl settings.", main)
+local function write_json(path, table)
+    local json = json.encode(table)
+    local file = io.open(path, "w")
+    file:write(json)
+    file:close()
+    aegisub.log(3, "Done. You'll need to rescan your automation directory or restart aegisub for the changes to take effect.")
+end
+
+local function get_config_path()
+    local path = depctrl:getConfigFileName()
+    path = path:gsub(script_namespace, "l0.DependencyControl")
+    aegisub.log(4, "config file: "..path.."\n")
+    return path
+end
+
+local function change_config(new) -- i think i might be thinning out the soup a bit too much
+    local config_path = get_config_path()
+    local data = read_json(config_path)
+    data.config = new(data)
+    write_json(config_path, data)
+end
+
+local function global_config()
+    change_config(get_config)
+end
+
+depctrl:registerMacro("DependencyControl/Global Configuration", "Lets you change DependencyControl settings.", global_config)
