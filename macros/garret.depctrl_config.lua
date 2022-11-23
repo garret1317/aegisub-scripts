@@ -142,9 +142,11 @@ local function get_config(data)
             value = config.logMaxSize or defaults.logMaxSize
         },
     }
-    pressed, res = aegisub.dialog.display(dialog)
-    if pressed == false then
+    local pressed, res = aegisub.dialog.display(dialog, {"Cancel", "Reset", "OK"})
+    if pressed == "Cancel" then
         aegisub.cancel()
+    elseif pressed == "Reset" then
+	    return {}
     end
     res.traceLevel = tonumber(res.traceLevel:match("^(%d)"))
     res.updateInterval = human_to_seconds(res.updateInterval)
