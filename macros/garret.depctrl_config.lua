@@ -1,7 +1,7 @@
 script_name="DepCtrl Global Config"
 script_description="the future is now"
 script_author = "garret"
-script_version = "1.0.1"
+script_version = "1.1.0"
 script_namespace = "garret.depctrl_config"
 
 local DependencyControl = require("l0.DependencyControl")
@@ -35,7 +35,7 @@ local function seconds_to_human(seconds)
     local days = math.floor((seconds % 31536000) / 86400)
     local hours = math.floor(((seconds % 31536000) % 86400) / 3600)
     local minutes = math.floor((((seconds % 31536000) % 86400) % 3600) / 60)
-    local seconds = (((seconds % 31536000) % 86400) % 3600) % 60
+    seconds = (((seconds % 31536000) % 86400) % 3600) % 60
     --return years, days, hours, minutes, seconds
     local timestamp = ""
     if years ~= 0 then timestamp = timestamp..years.."y" end
@@ -46,7 +46,7 @@ local function seconds_to_human(seconds)
     return timestamp
 end
 
-function human_to_seconds(human)
+local function human_to_seconds(human)
     -- im sure this is hideously inefficient
     local years = (tonumber(human:match("(%d*)y")) or 0) * 31536000
     local days = (tonumber(human:match("(%d*)d")) or 0) * 86400
@@ -159,15 +159,17 @@ local function main()
     data_path = data_path:gsub(script_namespace, "l0.DependencyControl")
     aegisub.log(4, "config file: "..data_path.."\n")
 
-    data_file = io.open(data_path, "r+")
-    data = json.decode(data_file:read())
+    local data_file = io.open(data_path, "r")
+    local data = json.decode(data_file:read())
+    data_file:close()
 
     data.config = get_config(data)
+    local data_str = json.encode(data)
 
-    data_str = json.encode(data)
+    data_file = io.open(data_path, "w")
     data_file:write(data_str)
     data_file:close()
     aegisub.log(3, "Done. You'll need to rescan your automation directory, or restart aegisub, for the changes to take effect.")
 end
 
-depctrl:registerMacro("DependencyControl/Global Configuration", "Lets you change DepedencyControl settings.", main)
+depctrl:registerMacro("DependencyControl/Global Configuration", "Lets you change DependencyControl settings.", main)
