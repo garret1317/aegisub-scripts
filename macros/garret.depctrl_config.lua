@@ -62,8 +62,7 @@ local function get_human_filesize(bytes)
     return bytes
 end
 
-local function get_config(data)
-    local config = data.config
+local function get_config(config)
     local defaults = {updaterEnabled = true, updateInterval = 302400, traceLevel = 3, extraFeeds = { }, tryAllFeeds = false, dumpFeeds = true, configDir = "?user/config", logMaxFiles = 200, logMaxAge = 604800, logMaxSize = 10 * (10 ^ 6), updateWaitTimeout = 60, updateOrphanTimeout = 600, logDir = "?user/log", writeLogs = true}
     local dialog = {
         {   class="checkbox", name="updaterEnabled",
@@ -178,7 +177,7 @@ end
 local function change_config(new) -- i think i might be thinning out the soup a bit too much
     local config_path = get_config_path()
     local data = read_json(config_path)
-    data.config = new(data)
+    data.config = new(data.config)
     write_json(config_path, data)
 end
 
