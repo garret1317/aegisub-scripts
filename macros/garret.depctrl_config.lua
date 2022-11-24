@@ -1,7 +1,7 @@
 script_name="DepCtrl Global Config"
 script_description="the future is now"
 script_author = "garret"
-script_version = "1.1.0"
+script_version = "1.2.0"
 script_namespace = "garret.depctrl_config"
 
 local DependencyControl = require("l0.DependencyControl")
@@ -63,7 +63,7 @@ local function get_human_filesize(bytes)
 end
 
 local function get_config(config)
-    local defaults = {updaterEnabled = true, updateInterval = 302400, traceLevel = 3, extraFeeds = { }, tryAllFeeds = false, dumpFeeds = true, configDir = "?user/config", logMaxFiles = 200, logMaxAge = 604800, logMaxSize = 10 * (10 ^ 6), updateWaitTimeout = 60, updateOrphanTimeout = 600, logDir = "?user/log", writeLogs = true}
+    local defaults = {updaterEnabled = true, updateInterval = 302400, traceLevel = 3, tryAllFeeds = false, dumpFeeds = true, configDir = "?user/config", logMaxFiles = 200, logMaxAge = 604800, logMaxSize = 10 * (10 ^ 6), updateWaitTimeout = 60, updateOrphanTimeout = 600, logDir = "?user/log", writeLogs = true}
     local dialog = {
         {   class="checkbox", name="updaterEnabled",
             x=0,y=0,width=2,height=1,
@@ -149,7 +149,39 @@ local function get_config(config)
     res.traceLevel = tonumber(res.traceLevel:sub(1, 1))
     res.updateInterval = human_to_seconds(res.updateInterval)
     res.logMaxAge = human_to_seconds(res.logMaxAge)
+    res.extraFeeds = config.extraFeeds
     return res
+end
+
+local function split_by_newline(list)
+    local strs = {}
+    for i in list:gmatch("[^\n]+") do
+        table.insert(strs, i)
+    end
+    return strs
+end
+
+local function get_feeds(config)
+    local extraFeeds = config.extraFeeds or {}
+
+    local feed_edit_string = table.concat(extraFeeds, "\n") or ""
+
+    local dialog = {
+        {   class="label",
+            x=0,y=0,width=1,height=1,
+            label = "Extra Feeds:",
+        },
+        {   class="textbox", name = "feeds",
+            x=0,y=1,width=20,height=15,
+            text = feed_edit_string
+        },
+    }
+
+    local pressed, res = aegisub.dialog.display(dialog)
+    if not pressed then aegisub.cancel() end
+
+    config.extraFeeds = split_by_newline(res.feeds)
+    return config
 end
 
 local function read_json(path)
@@ -185,4 +217,9 @@ local function global_config()
     change_config(get_config)
 end
 
+local function extra_feeds()
+    change_config(get_feeds)
+end
+
 depctrl:registerMacro("DependencyControl/Global Configuration", "Lets you change DependencyControl settings.", global_config)
+depctrl:registerMacro("DependencyControl/Extra Feeds", "Lets you provide additional update feeds.", extra_feeds)
