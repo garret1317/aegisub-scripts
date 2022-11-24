@@ -1,7 +1,7 @@
 script_name="Dupe and Comment"
 script_description="Copies a line and comments out the original.\nbecause i like seeing the original while editing, and being able to go back to it easily"
 script_author = "garret"
-script_version = "2.1.0"
+script_version = "2.1.1"
 script_namespace = "garret.dupe-and-comment"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
@@ -16,7 +16,7 @@ else
     util = require 'aegisub.util'
 end
 
-function comment(subs, sel)
+local function comment(subs, sel)
     for i=#sel,1,-1 do
         local line=subs[sel[i]]
         local dupe = util.copy(line)
@@ -27,7 +27,7 @@ function comment(subs, sel)
     aegisub.set_undo_point(script_name)
 end
 
-function undo(subs, sel)
+local function undo(subs, sel)
     for i=#sel,1,-1 do
         local edit=subs[sel[i]]
         local original=subs[sel[i]+1]
