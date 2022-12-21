@@ -1,7 +1,7 @@
 script_name="Restyler"
 script_description="become a fansubber with a click of a button"
 script_author = "garret"
-script_version = "2.1.0"
+script_version = "2.1.1"
 script_namespace = "garret.restyler"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
@@ -9,9 +9,10 @@ if haveDepCtrl then
     depctrl = DependencyControl {
         --feed="TODO",
     }
-    include("karaskel.lua")
-    include("cleantags.lua")
 end
+
+include("karaskel.lua")
+include("cleantags.lua")
 
 -- local config = simpleconf.get_config(aegisub.decode_path(config_dir.."/"..script_namespace..".conf"), {new_style = "Default"})
 
