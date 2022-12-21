@@ -1,15 +1,11 @@
 script_name="DepCtrl Global Config"
 script_description="the future is now"
 script_author = "garret"
-script_version = "1.2.0"
+script_version = "1.3.0"
 script_namespace = "garret.depctrl_config"
 
 local DependencyControl = require("l0.DependencyControl")
-local depctrl = DependencyControl {
-    --feed="TODO",
-    {"json"}
-}
-local json = depctrl:requireModules()
+local depctrl = DependencyControl {}
 
 local function get_bool(field, default) -- can't just do `field or default`, because the default might be true when field is false
     if field == nil then
@@ -63,7 +59,7 @@ local function get_human_filesize(bytes)
 end
 
 local function get_config(config)
-    local defaults = {updaterEnabled = true, updateInterval = 302400, traceLevel = 3, tryAllFeeds = false, dumpFeeds = true, configDir = "?user/config", logMaxFiles = 200, logMaxAge = 604800, logMaxSize = 10 * (10 ^ 6), updateWaitTimeout = 60, updateOrphanTimeout = 600, logDir = "?user/log", writeLogs = true}
+    local defaults = DependencyControl.config.defaults
     local dialog = {
         {   class="checkbox", name="updaterEnabled",
             x=0,y=0,width=2,height=1,
@@ -144,7 +140,7 @@ local function get_config(config)
     if pressed == "Cancel" then
         aegisub.cancel()
     elseif pressed == "Reset" then
-	    return {}
+        return {}
     end
     res.traceLevel = tonumber(res.traceLevel:sub(1, 1))
     res.updateInterval = human_to_seconds(res.updateInterval)
@@ -184,33 +180,23 @@ local function get_feeds(config)
     return config
 end
 
-local function read_json(path)
-    local file = io.open(path, "r")
-    local json = json.decode(file:read())
-    file:close()
-    return json
-end
-
-local function write_json(path, table)
-    local json = json.encode(table)
-    local file = io.open(path, "w")
-    file:write(json)
-    file:close()
+local function write_config(new)
+    for k, v in pairs(new) do
+        if (v == nil) -- allow nil, so the reset to defaults button works
+        or v ~= (DependencyControl.config.c[k] or DependencyControl.config.defaults[k]) -- check it's not the current value anyway
+        then
+            -- changed, save
+            DependencyControl.config.c[k] = v
+        end
+    end
+    DependencyControl.config:write(true)
     aegisub.log(3, "Done. You'll need to rescan your automation directory or restart aegisub for the changes to take effect.")
 end
 
-local function get_config_path()
-    local path = depctrl:getConfigFileName()
-    path = path:gsub(script_namespace, "l0.DependencyControl")
-    aegisub.log(4, "config file: "..path.."\n")
-    return path
-end
-
-local function change_config(new) -- i think i might be thinning out the soup a bit too much
-    local config_path = get_config_path()
-    local data = read_json(config_path)
-    data.config = new(data.config)
-    write_json(config_path, data)
+local function change_config(modifier) -- i think i might be thinning out the soup a bit too much
+    DependencyControl.config:load()
+    local new_config = modifier(DependencyControl.config.c)
+    write_config(new_config)
 end
 
 local function global_config()
