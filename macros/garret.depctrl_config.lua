@@ -1,7 +1,7 @@
 script_name="DepCtrl Global Config"
 script_description="the future is now"
 script_author = "garret"
-script_version = "1.3.0"
+script_version = "1.3.1"
 script_namespace = "garret.depctrl_config"
 
 local DependencyControl = require("l0.DependencyControl")
@@ -183,7 +183,7 @@ end
 local function write_config(new)
     for k, v in pairs(new) do
         if (v == nil) -- allow nil, so the reset to defaults button works
-        or v ~= (DependencyControl.config.c[k] or DependencyControl.config.defaults[k]) -- check it's not the current value anyway
+        or v ~= get_bool(DependencyControl.config.c[k], DependencyControl.config.defaults[k]) -- check it's not the current value anyway
         then
             -- changed, save
             DependencyControl.config.c[k] = v
