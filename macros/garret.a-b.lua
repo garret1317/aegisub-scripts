@@ -1,7 +1,7 @@
 script_name = "A-B"
 script_description = "makes checking pre-timing possible."
 script_author = "garret"
-script_version = "2.1.1"
+script_version = "3.0.0"
 script_namespace = "garret.a-b"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
@@ -31,7 +31,7 @@ function main(sub, sel)
         if line.text == "" then
             line.text = indicator
         elseif line.text:gsub("{[^}]-}","") == "" then
-            line.text = indicator.." "..line.text
+            line.text = line.text .. indicator -- apply tags
         end
         sub[li] = line
         i = switch_number(i)
