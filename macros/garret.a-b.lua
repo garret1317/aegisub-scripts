@@ -51,8 +51,31 @@ local function main(sub, sel)
     aegisub.set_undo_point(script_name)
 end
 
+local function undo(sub, sel)
+    local i = "a"
+    for _,li in ipairs(sel) do
+        local line = sub[li]
+        local indicator = get_indicator(i, line.actor)
+
+        if line.text == indicator then
+            line.text = ""
+        else
+            line.text = line.text:gsub(indicator.."$", "")
+        end
+        sub[li] = line
+        i = switch_indicator(i)
+    end
+end
+
+local macros = {
+    {"Add indicators", script_description, main},
+    {"Clean up","Gets rid of the indicators once you've adjusted the lines", undo}
+}
 if haveDepCtrl then
-    depctrl:registerMacro(main)
+    depctrl:registerMacros(macros)
 else
-    aegisub.register_macro(script_name, script_description, main)
+    for _,macro in ipairs(macros) do
+        local name, desc, fun = unpack(macro)
+        aegisub.register_macro(script_name .. '/' .. name, desc, fun)
+    end
 end
