@@ -33,6 +33,11 @@ local function get_indicator(letter, actor)
     return indicator
 end
 
+local function escape_pattern(txt)
+    local magic_chars = "%^%$%(%)%%.%[%]%*%+%-%?"
+    return txt:gsub("(["..magic_chars.."])", "%%%1")
+end
+
 local function main(sub, sel)
     local i = "a"
     for _,li in ipairs(sel) do
@@ -60,7 +65,8 @@ local function undo(sub, sel)
         if line.text == indicator then
             line.text = ""
         else
-            line.text = line.text:gsub(indicator.."$", "")
+            local escaped = escape_pattern(indicator)
+            line.text = line.text:gsub(escaped, "")
         end
         sub[li] = line
         i = switch_indicator(i)
