@@ -11,7 +11,7 @@ if haveDepCtrl then
     }
 end
 
-function switch_number(i)
+local function switch_indicator(i)
     if i == "a" then
         return "b"
     elseif i == "b" then
@@ -19,22 +19,34 @@ function switch_number(i)
     end
 end
 
-function main(sub, sel)
+local function strip_tags(text)
+    return text:gsub("{[^}]-}","")
+end
+
+local function get_indicator(letter, actor)
+    local indicator
+    if actor == "" then
+        indicator = letter
+    else
+    indicator = actor.." "..letter
+    end
+    return indicator
+end
+
+local function main(sub, sel)
     local i = "a"
-    for si,li in ipairs(sel) do
-        line = sub[li]
-        if line.actor == "" then
-            indicator = i
-        else
-        indicator = line.actor.." "..i
-        end
+    for _,li in ipairs(sel) do
+        local line = sub[li]
+        local indicator = get_indicator(i, line.actor)
+
         if line.text == "" then
             line.text = indicator
-        elseif line.text:gsub("{[^}]-}","") == "" then
+        elseif strip_tags(line.text) == "" then
             line.text = line.text .. indicator -- apply tags
         end
+
         sub[li] = line
-        i = switch_number(i)
+        i = switch_indicator(i)
     end
     aegisub.set_undo_point(script_name)
 end
