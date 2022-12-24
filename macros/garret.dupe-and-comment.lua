@@ -1,7 +1,7 @@
 script_name="Dupe and Comment"
 script_description="Copies a line and comments out the original.\nbecause i like seeing the original while editing, and being able to go back to it easily"
 script_author = "garret"
-script_version = "2.1.2"
+script_version = "2.1.3"
 script_namespace = "garret.dupe-and-comment"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
@@ -30,11 +30,13 @@ end
 local function undo(subs, sel)
     for i=#sel,1,-1 do
         local edit=subs[sel[i]]
-        local original=subs[sel[i]+1]
-        if edit.comment == false and original.comment == true then
-            original.comment = false
-            subs[sel[i]+1] = original
-            subs.delete(sel[i])
+        if not (sel[i] + 1 > #subs) then
+            local original=subs[sel[i]+1]
+            if edit.comment == false and original.comment == true then
+                original.comment = false
+                subs[sel[i]+1] = original
+                subs.delete(sel[i])
+            end
         end
     end
     aegisub.set_undo_point("Undo "..script_name)
