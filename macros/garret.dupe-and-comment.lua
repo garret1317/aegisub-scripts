@@ -5,29 +5,25 @@ script_version = "2.1.3"
 script_namespace = "garret.dupe-and-comment"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
-local util
 if haveDepCtrl then
     depctrl = DependencyControl {
         --feed="TODO",
-        {"aegisub.util"}
     }
-    util = depctrl:requireModules()
-else
-    util = require 'aegisub.util'
 end
 
-local function comment(subs, sel)
+local function comment(subs, sel, act)
     for i=#sel,1,-1 do
         local line=subs[sel[i]]
-        local original = util.copy(line)
-        line.comment = false -- going to edit it, so we probably want to see it on the video
-        original.comment = true -- this is the actual original one
-        subs.insert(sel[i]+1, original) -- putting it on the next line so i don't have to change line
+        line.comment = true
+        subs.insert(sel[i]+1, line)
+        for j=i+1,#sel do sel[j] = sel[j] + 1 end
+        if act > sel[i] then act = act + 1 end
     end
     aegisub.set_undo_point(script_name)
+    return sel, act
 end
 
-local function undo(subs, sel)
+local function undo(subs, sel, act)
     for i=#sel,1,-1 do
         local edit=subs[sel[i]]
         if not (sel[i] + 1 > #subs) then
@@ -36,10 +32,13 @@ local function undo(subs, sel)
                 original.comment = false
                 subs[sel[i]+1] = original
                 subs.delete(sel[i])
+                for j=i+1,#sel do sel[j] = sel[j] - 1 end
+                if act > sel[i] then act = act - 1 end
             end
         end
     end
     aegisub.set_undo_point("Undo "..script_name)
+    return sel, act
 end
 
 local macros = {
