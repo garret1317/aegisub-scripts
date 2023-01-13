@@ -1,7 +1,7 @@
 script_name = "Import Shenanigans"
 script_description = "imports shenanigans"
 script_author = "garret"
-script_version = "0.1.0"
+script_version = "0.1.1"
 script_namespace = "garret.shenanigans"
 
 local SHENAN_PATTERN = "shenan ([^;]*)"
@@ -52,7 +52,9 @@ local function main(sub)
 			aegisub.log(5, i..": has effect: "..line.effect)
 				local name = line.effect:match(SHENAN_PATTERN)
 				local shenans = imports[name]
-				if shenans ~= "done" then
+				if shenans == nil then
+					
+				elseif shenans ~= "done" then
 					for idx, val in ipairs(shenans) do
 						sub.insert(i + idx, val)
 					end
