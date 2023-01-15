@@ -1,45 +1,61 @@
 script_name="Dupe and Comment"
 script_description="Copies a line and comments out the original.\nbecause i like seeing the original while editing, and being able to go back to it easily"
 script_author = "garret"
-script_version = "2.1.3"
+script_version = "3.0.0"
 script_namespace = "garret.dupe-and-comment"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
-local util
 if haveDepCtrl then
     depctrl = DependencyControl {
         --feed="TODO",
-        {"aegisub.util"}
     }
-    util = depctrl:requireModules()
-else
-    util = require 'aegisub.util'
 end
 
-local function comment(subs, sel)
+local function comment(subs, sel, act)
     for i=#sel,1,-1 do
-        local line=subs[sel[i]]
-        local original = util.copy(line)
-        line.comment = false -- going to edit it, so we probably want to see it on the video
-        original.comment = true -- this is the actual original one
-        subs.insert(sel[i]+1, original) -- putting it on the next line so i don't have to change line
+        local line=subs[sel[i]] -- grab copy of current line
+
+        -- now use that copy for a different line
+        line.comment = true -- comment out the new dupe line
+        subs.insert(sel[i]+1, line) -- and put it below
+
+        -- sort out selection
+        for j=i+1,#sel do
+            sel[j] = sel[j] + 1 -- bump all of sel by 1 to compensate for new line
+        end -- first item isnt included because it's not affected
+
+        if act > sel[i] then -- if we've not got to the active line yet
+            act = act + 1 -- bump by 1 to compensate for new lines above
+        end
     end
     aegisub.set_undo_point(script_name)
+    return sel, act
 end
 
-local function undo(subs, sel)
+local function undo(subs, sel, act)
     for i=#sel,1,-1 do
         local edit=subs[sel[i]]
-        if not (sel[i] + 1 > #subs) then
+        if not (sel[i] + 1 > #subs) then -- preventing out-of-range errors
             local original=subs[sel[i]+1]
+
             if edit.comment == false and original.comment == true then
                 original.comment = false
                 subs[sel[i]+1] = original
                 subs.delete(sel[i])
+
+                -- sort out selection. same as `do`, but the other way round.
+                for j=i+1,#sel do
+                    sel[j] = sel[j] - 1
+                end
+                if act > sel[i] then
+                    act = act - 1
+                end
+
             end
         end
     end
     aegisub.set_undo_point("Undo "..script_name)
+    return sel, act
 end
 
 local macros = {
