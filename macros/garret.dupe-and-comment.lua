@@ -35,14 +35,22 @@ end
 local function undo(subs, sel, act)
     for i=#sel,1,-1 do
         local edit=subs[sel[i]]
-        if not (sel[i] + 1 > #subs) then
+        if not (sel[i] + 1 > #subs) then -- preventing out-of-range errors
             local original=subs[sel[i]+1]
+
             if edit.comment == false and original.comment == true then
                 original.comment = false
                 subs[sel[i]+1] = original
                 subs.delete(sel[i])
-                for j=i+1,#sel do sel[j] = sel[j] - 1 end
-                if act > sel[i] then act = act - 1 end
+
+                -- sort out selection. same as `do`, but the other way round.
+                for j=i+1,#sel do
+                    sel[j] = sel[j] - 1
+                end
+                if act > sel[i] then
+                    act = act - 1
+                end
+
             end
         end
     end
