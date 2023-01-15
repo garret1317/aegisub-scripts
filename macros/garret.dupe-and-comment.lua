@@ -1,7 +1,7 @@
 script_name="Dupe and Comment"
 script_description="Copies a line and comments out the original.\nbecause i like seeing the original while editing, and being able to go back to it easily"
 script_author = "garret"
-script_version = "2.1.3"
+script_version = "3.0.0"
 script_namespace = "garret.dupe-and-comment"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
