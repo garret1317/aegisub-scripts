@@ -1,7 +1,7 @@
 script_name="Dupe and Comment"
 script_description="Copies a line and comments out the original.\nbecause i like seeing the original while editing, and being able to go back to it easily"
 script_author = "garret"
-script_version = "3.0.0"
+script_version = "3.0.1"
 script_namespace = "garret.dupe-and-comment"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
@@ -19,14 +19,13 @@ local function comment(subs, sel, act)
         line.comment = true -- comment out the new dupe line
         subs.insert(sel[i]+1, line) -- and put it below
 
-        -- sort out selection
-        for j=i+1,#sel do
-            sel[j] = sel[j] + 1 -- bump all of sel by 1 to compensate for new line
-        end -- first item isnt included because it's not affected
+        -- sort out sel/act
+        local preceding_lines = i - 1
+        local on_act = act == sel[i]
 
-        if act > sel[i] then -- if we've not got to the active line yet
-            act = act + 1 -- bump by 1 to compensate for new lines above
-        end
+        sel[i] = sel[i] + preceding_lines
+        if on_act then act = sel[i] end
+
     end
     aegisub.set_undo_point(script_name)
     return sel, act
@@ -44,12 +43,11 @@ local function undo(subs, sel, act)
                 subs.delete(sel[i])
 
                 -- sort out selection. same as `do`, but the other way round.
-                for j=i+1,#sel do
-                    sel[j] = sel[j] - 1
-                end
-                if act > sel[i] then
-                    act = act - 1
-                end
+                local preceding_lines = i + 1
+                local on_act = act == sel[i]
+
+                sel[i] = sel[i] - following_lines
+                if on_act then act = sel[i] end
 
             end
         end
