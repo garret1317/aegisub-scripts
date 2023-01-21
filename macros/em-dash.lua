@@ -1,7 +1,7 @@
 script_name = "Em-dash"
 script_description = "I do not have an em-dash key on my keyboard"
 script_author = "garret"
-script_version = "2.0.0"
+script_version = "2.0.1"
 
 local em = "—"
 
@@ -17,14 +17,14 @@ local function append(sub, sel)
 	aegisub.set_undo_point(script_name)
 end
 
-function replace(sub, sel)
-    for si, li in ipairs(sel) do
-        local line = sub[li]
-        local text = sub[li].text
-        text = text:gsub("%-%-",em)
-    	line.text=text
-        sub[li] = line
-    end
+local function replace(sub, sel)
+	for si, li in ipairs(sel) do
+		local line = sub[li]
+		local text = sub[li].text
+		text = text:gsub("%-%-",em)
+		line.text=text
+		sub[li] = line
+	end
 	aegisub.set_undo_point(script_name)
 end
 
