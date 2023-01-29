@@ -19,13 +19,14 @@ local function comment(subs, sel, act)
         line.comment = true -- comment out the new dupe line
         subs.insert(sel[i]+1, line) -- and put it below
 
-        -- sort out sel/act
-        local preceding_lines = i - 1
-        local on_act = act == sel[i]
+--        if #sel > 1 then
+            -- sort out sel/act
+            local preceding_lines = i - 1
+            local on_act = act == sel[i]
 
-        sel[i] = sel[i] + preceding_lines
-        if on_act then act = sel[i] end
-
+            sel[i] = sel[i] + preceding_lines
+            if on_act then act = sel[i] end
+--        end
     end
     aegisub.set_undo_point(script_name)
     return sel, act
@@ -42,12 +43,14 @@ local function undo(subs, sel, act)
                 subs[sel[i]+1] = original
                 subs.delete(sel[i])
 
+                if #sel > 1 then
                 -- sort out selection. same as `do`, but the other way round.
                 local preceding_lines = i + 1
                 local on_act = act == sel[i]
 
-                sel[i] = sel[i] - following_lines
+                sel[i] = sel[i] - preceding_lines
                 if on_act then act = sel[i] end
+                end
 
             end
         end
