@@ -4,6 +4,22 @@ script_author = "garret"
 script_version = "5.0.0"
 script_namespace = "garret.dupe-and-comment"
 
+script_changelog = {
+    ["5.0.0"] = {"subtle BREAKING CHANGE: Undo no longer cares whether the edit is a comment or not. This means it'll work in places it didn't before.", "Undo now sets the restored line to whatever comment status the edited line was. You won't get the same result when restoring lines where the edit is a comment.", "There is now a changelog for DepCtrl. (hint: you're reading it)"},
+    ["4.0.0"] = {"Use on fold boundaries now works as expected."},
+    ["3.0.2"] = {"code cleanup: variable names are now informative again."},
+    ["3.0.1"] = {"Fixing selected/active lines is now more efficient."},
+    ["3.0.0"] = {"Selected lines and active line will now be properly set after do and undo.", "Duplicating no longer depends on aegisub.util."},
+    ["2.1.3"] = {"Trying to undo the final line no longer gives an out-of-range error (it fails silently instead)."},
+    ["2.1.2"] = {"code cleanup: change variable names"},
+    ["2.1.1"] = {"code cleanup: use local functions"},
+    ["2.1.0"] = {"Added DepCtrl compatibility."},
+    ["2.0.0"] = {"version 2021-04-11", "BREAKING CHANGE: Automation menu entries have been moved to a dedicated submenu."},
+    ["1.1.0"] = {"version 2021-04-10", "Added undo macro."},
+    ["1.0.0"] = {"inital git commit, version 2021-04-05", "The script now works with multiple lines.", "Switched to using aegisub.util for copying lines.", "cleaned up code"},
+    ["0.1.0"] = {"snapshot from 2021-04-04, earliest copy i have", "has comment function, but only works on a single line at a time"},
+}
+
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
 if haveDepCtrl then
     depctrl = DependencyControl {
