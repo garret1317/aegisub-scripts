@@ -1,7 +1,7 @@
 script_name="Dupe and Comment"
 script_description="Copies a line and comments out the original.\nbecause i like seeing the original while editing, and being able to go back to it easily"
 script_author = "garret"
-script_version = "4.0.0"
+script_version = "5.0.0"
 script_namespace = "garret.dupe-and-comment"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
@@ -64,8 +64,8 @@ local function undo(subs, sel, act)
         if not (sel[i] + 1 > #subs) then -- preventing out-of-range errors
             local original=subs[sel[i]+1]
 
-            if edit.comment == false and original.comment == true then
-                original.comment = false
+            if original.comment == true then
+                original.comment = edit.comment
                 -- deal with being at the start/end of a fold
 
                 local at_fold_end = find_fold_boundary(edit)
