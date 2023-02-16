@@ -1,7 +1,7 @@
 script_name="Dupe and Comment"
 script_description="Copies a line and comments out the original.\nbecause i like seeing the original while editing, and being able to go back to it easily"
 script_author = "garret"
-script_version = "3.0.1"
+script_version = "3.0.2"
 script_namespace = "garret.dupe-and-comment"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
@@ -13,11 +13,12 @@ end
 
 local function comment(subs, sel, act)
     for i=#sel,1,-1 do
-        local line=subs[sel[i]] -- grab copy of current line
+        local edit=subs[sel[i]] -- current line
+        local original=subs[sel[i]] -- and a copy of it
 
         -- now use that copy for a different line
-        line.comment = true -- comment out the new dupe line
-        subs.insert(sel[i]+1, line) -- and put it below
+        original.comment = true -- comment out the new dupe line
+        subs.insert(sel[i]+1, original) -- and put it below
 
 --        if #sel > 1 then
             -- sort out sel/act
