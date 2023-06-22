@@ -38,6 +38,26 @@ Does an alright enough job most of the time, but is ignorant of whitespace.
 
 Not that it really matters, you'll be retiming it anyway.
 
+## Song timer
+
+makes song timing into a rhythm game
+so you can vibe while you time
+
+bind to e.g. space
+
+0. tap to initialise (`READY`)
+1. tap to set start (`START`)
+1. tap to set end (`END`) + move to next line (`READY`)
+1. go to 1.
+
+apparently that's what some vhs era groups did for their entire dialogue timing
+
+probably won't work too well for that, but for songs (where they're reasonably on-beat) it's pretty good (for a rough pass), especially if you know the song well.
+
+won't be faster, but will be much more enjoyable
+
+doesn't have depctrl - needs to be fast
+
 ## K-Timing -> Alpha Timing
 
 Makes doing alpha timing significantly easier by getting rid of the part where you do alpha timing.
