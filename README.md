@@ -3,9 +3,8 @@
 Aegisub automation scripts I've written.
 Nothing cool and exciting here, just little utilities that make my life easier.
 
-I write and use these on [arch1t3cht's fork](https://github.com/arch1t3cht/Aegisub/) on Linux (previously aegisub mainline), but they should work perfectly fine wherever, I don't think there's anything OS or fork-specific in there.
-
-One day I'll get round to sorting out a DependencyControl feed. If you're reading this, that day has not yet come.
+You are welcome to package and distribute these scripts as a DependencyControl feed, provided you
+comply with the terms of the licence. I will not be doing so myself.
 
 ----
 
@@ -18,8 +17,6 @@ This lets you:
 - quickly create different versions of a line
 - see the differences at a glance
 - easily revert to the original, even if the undo history is gone
-
-Probably the script I use the most.
 
 | Key | Function | Rationale |
 | --- | -------- | --------- |
@@ -36,8 +33,6 @@ Splits romaji into karaoke syls. For the lazy k-timer.
 Tries to use the lengths that aegi would produce if you did it manually.
 Does an alright enough job most of the time, but is ignorant of whitespace.
 
-Not that it really matters, you'll be retiming it anyway.
-
 ## Song timer
 
 makes song timing into a rhythm game
@@ -52,11 +47,8 @@ bind to e.g. space
 
 apparently that's what some vhs era groups did for their entire dialogue timing
 
-probably won't work too well for that, but for songs (where they're reasonably on-beat) it's pretty good (for a rough pass), especially if you know the song well.
-
-won't be faster, but will be much more enjoyable
-
-doesn't have depctrl - needs to be fast
+it's pretty good for (rough pass) song timing, especially if you know the song well.
+probably won't be faster, but will be much more enjoyable
 
 ## K-Timing -> Alpha Timing
 
@@ -74,22 +66,12 @@ There's a line in the DependencyControl README that goes:
 
 > DependencyControl stores its configuration as a JSON file in the _config_ subdirectory of your Aegisub folder (`l0.DependencyControl.json`). Currently you'll have to edit this file manually, in the future there will be a management macro.
 
-That line's been there for about 7 years now.
-
-I wanted to change some settings without wading through the JSON and typing in the right stuff myself, so I wrote this.
+The management macro still doesn't exist, so i wrote one myself.
 
 ## Select Comments
 
 Tiny utility script.
 Easier than `Subtitle > Select Lines` etc
-
-----
-
-Updating this README has made me realise that I only really have 2 or 3 actually useful scripts. Here are the bad and/or useless ones. 
-
-These scripts should be considered abandoned for the foreseeable future.
-
-They should all work decently enough, it's just that what they do isn't useful very often, or is done better by something else.
 
 ## A-B
 
@@ -100,7 +82,7 @@ ignores lines with text in them, prepends to lines with just tags in them
 
 ## Audio Clipper
 
-Old and bad, but maybe still useful sometimes.
+useful sometimes (cant losslessly cut in audacity)
 
 **Needs [FFMPEG](https://ffmpeg.org) in your PATH.**
 
@@ -110,38 +92,28 @@ Output is either stream-copied, or encoded to a format of your choice.
 By default, makes a folder called `audioclipper_output` and dumps all the files in there.
 The filename is the index of the line in your selection.
 
-**Done better by**: [Petzku's `Encode Clip`](https://github.com/petzku/Aegisub-Scripts/blob/master/macros/petzku.EncodeClip.lua), Aegisub's `Create audio clip` button.
-
 ## Chapter Generator
 
 Makes XML chapters for Matroska.
 
 Incomplete clone of the chapter generator in [Significance](https://github.com/unanimated/luaegisub/blob/master/ua.Significance.lua).
-No proper XML handling here, just mashing strings together and hoping for the best.
 
 Makes lines with the effect `[Cc]hapter`, `[Cc]hptr` or `[Cc]hap` into chapters.
 
 Start time is the timestamp, line text is the chapter name.
-Language is currently hardcoded to English.
-
-**Done better by**: `Significance`, SubKt.
+Language is hardcoded to English.
 
 ## Restyler
 
 previously `become-fansubber.lua`
 
-For dealing with CR scripts.
-
 Changes style of selected lines to `Default` and copies italic+alignment values from the script's styles to inline tags.
+This is meant for restyling crunchyroll scripts to the fansub group's house style.
 
 Can't help if the source script isn't sanely styled.
-**cannot handle inline tags!**
 
 ## Scenebleed Detector
 
 Finds scenebleeds in the selected lines, and marks them with an effect (`bleed`).
 
-Currently has a hardcoded threshold of 500ms, as my brain is too small to figure out how to do a config file.
-
-**Done better by**: probably some UA script
-
+hardcoded threshold of 500ms.
