@@ -12,11 +12,9 @@ if haveDepCtrl then
     }
 end
 
---local config = simpleconf.get_config(aegisub.decode_path(config_dir.."/"..script_namespace..".conf"), {language = "eng", language_ietf = "en"})
 local config = {language = "eng", language_ietf = "en"}
 
-
-function ms_to_human(start) -- From Significance
+local function ms_to_human(start) -- From Significance
     local timecode=math.floor(start/1000)
     local tc1=math.floor(timecode/60)
     local tc2=timecode%60
@@ -33,7 +31,7 @@ function ms_to_human(start) -- From Significance
     return linetime
 end
 
-function get_sane_path()
+local function get_sane_path()
     script_path = aegisub.decode_path("?script")
     audio_path = aegisub.decode_path("?audio")
     video_path = aegisub.decode_path("?video")
@@ -48,16 +46,16 @@ function get_sane_path()
     end
 end
 
-function get_user_path(default_dir)
+local function get_user_path(default_dir)
     local path = aegisub.dialog.save("Save Chapter File", default_dir, "chapters.xml", "XML files|*.xml|All Files|*", false)
     return path
 end
 
-function main(sub)
+local function main(sub)
     local times = {}
     local names = {}
     for i=1,#sub do
-		local line = sub[i]
+        local line = sub[i]
         if line.class == "dialogue" then
             local fx = line.effect
             if fx:match("[Cc]hapter") or fx:match("[Cc]hptr") or fx:match("[Cc]hap") then
