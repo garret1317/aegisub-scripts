@@ -1,7 +1,7 @@
 script_name = "Chapter Generator"
 script_description = "Makes XML chapters for matroska."
 script_author = "garret"
-script_version = "2.1.0"
+script_version = "2.2.0"
 script_namespace = "garret.chapters"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
@@ -51,16 +51,62 @@ local function get_user_path(default_dir)
     return path
 end
 
+-- from arch.Util apparently
+local function exact_ms_from_frame(frame)
+--[[
+MIT License
+
+Copyright (c) 2022 arch1t3cht
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+]]
+  frame = frame + 1
+  local ms = aegisub.ms_from_frame(frame)
+  while true do
+    local new_ms = ms - 1
+    if new_ms < 0 or aegisub.frame_from_ms(new_ms) ~= frame then
+      break
+    end
+    ms = new_ms
+  end
+  return ms - 1
+end
+
 local function main(sub)
     local times = {}
     local names = {}
+    if aegisub.decode_path("?video") == "?video" then
+        aegisub.log(3, "you don't have a video open, times will be limited to centiseconds (realistically this is fine)\n")
+    end
     for i=1,#sub do
         local line = sub[i]
         if line.class == "dialogue" then
             local fx = line.effect
             if fx:match("[Cc]hapter") or fx:match("[Cc]hptr") or fx:match("[Cc]hap") then
                 line.comment = true
-                table.insert(times, line.start_time)
+
+                local time = line.start_time
+                if aegisub.decode_path("?video") ~= "?video" then
+                    -- cunning and devious scheme to get accurate milliseconds
+                    time = math.max(exact_ms_from_frame(aegisub.frame_from_ms(line.start_time)), 0)
+                end
+                table.insert(times, time)
                 table.insert(names, line.text)
                 sub[i] = line
             end
