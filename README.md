@@ -1,12 +1,40 @@
 # garret's aegisub scripts
 
-Aegisub automation scripts I've written.
-Nothing cool and exciting here, just little utilities that make my life easier.
+These are automation scripts ("plugins" basically) I've written for the subtitle editor [Aegisub](https://aegisub.org).
 
-You are welcome to package and distribute these scripts as a DependencyControl feed, provided you
-comply with the terms of the licence. I will not be doing so myself.
+I do timing and editing, so these scripts mainly help with those. There's nothing ground-breaking and exciting here, just some stuff to make my life easier.
+
+## how do i install them
+
+I believe you should just be able to add them via the [Automation Manager](https://aegisub.org/docs/3.2/Automation/Manager/index.html), or put them in your `autoload` folder.
+
+Most of them should register themselves with [DependencyControl](https://github.com/TypesettingTools/DependencyControl) if you have it installed, but I haven't set up a feed, so you won't be able to update them that way.
+
+I'm not bothering with DepCtrl for newer scripts as it's too much red tape/boilerplate imo. sorry about that.
+
+## how do i get help
+
+ping me in the [GJM discord server](https://discord.gg/hQewDqS) (same username) and I'll probably reply eventually. Otherwise, open a github issue.
+
+```
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```
+ie, technically its not my problem if it doesnt work, burns your house down, etc 👍
+
+fundamentally this is just stuff i wrote for myself and threw over the wall in case it could be useful to someone else as well, i will probably try to help though
 
 ----
+
+And now, the scripts, in no particular order:
 
 ## Dupe and Comment
 
@@ -26,35 +54,71 @@ This lets you:
 
 These hotkeys let me have everything related to duplication on one key.
 
-## Syllable Splitter
+Thanks to [Akatsumekusa](https://github.com/Akatmks) for helping improve this script.
 
-Splits romaji into karaoke syls. For the lazy k-timer.
 
-Tries to use the lengths that aegi would produce if you did it manually.
-Does an alright enough job most of the time, but is ignorant of whitespace.
+## Chapter Generator
 
-## Song timer
+Generates a chapters file that you can mux into your MKV.
 
-makes song timing into a rhythm game
-so you can vibe while you time
+Make a new line, starting at the start of your chapter. Put the chapter name in the text, then mark it with `chapter`, `chptr` or `chap` in the effect field.
 
-bind to e.g. space
+For example:
 
-0. tap to initialise (`READY`)
-1. tap to set start (`START`)
-1. tap to set end (`END`) + move to next line (`READY`)
-1. go to 1.
+```
+Comment: 0,0:00:00.00,0:00:01.00,Default,,0,0,0,chap,Intro
+Comment: 0,0:03:12.96,0:03:13.96,Default,,0,0,0,chap,OP
+Comment: 0,0:04:43.01,0:04:44.01,Default,,0,0,0,chap,Part A
+Comment: 0,0:11:43.02,0:11:44.02,Default,,0,0,0,chap,Part B
+Comment: 0,0:21:09.96,0:21:10.96,Default,,0,0,0,chap,ED
+Comment: 0,0:22:40.01,0:22:41.01,Default,,0,0,0,chap,Outro
+```
 
-apparently that's what some vhs era groups did for their entire dialogue timing
+Then run the script and save the file it gives you. You use it in the Chapters section of MKVToolNix (in the `Output` tab).
 
-it's pretty good for (rough pass) song timing, especially if you know the song well.
-probably won't be faster, but will be much more enjoyable
+### tips/useful things to know
+
+- The first letter of the effect can be uppercase if you want.
+- The end time of the line doesn't matter, it's not used in the chapters.
+- The language is hardcoded to English, but it's not _too_ difficult to edit the script to change it. Just CTRL-F for `eng` and change the two values.
+
+### acknowledgements
+
+Includes code by unanimated to convert from ms to `H:MM:SS.mmm` (stolen from [Significance](http://unanimated.hostfree.pw/ts/signi.lua)).
+
+Includes [code by arch1t3cht](https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts/blob/0b67d516c7087c308c81d6a663596615d83126a6/modules/arch/Util.moon#L26-L40) to make the timestamps frame-accurate. Used under the terms of the MIT License.
+
+
+## Restyler
+
+Changes the style of selected lines to `Default`, and converts italic+alignment (`\an`) values from the script's styles to inline tags.
+This is meant for restyling crunchyroll scripts that use separate styles like `main`, `top`, `italics`, `italicstop`, etc.
+
+On a related note, you might like [Chrolo's script](https://github.com/Chrolo/ChroloScripts_Aegisub/blob/master/chrolo.Restyler.lua) to change a line's base style without changing how it actually looks.
+
+previously `become-fansubber.lua`
+
+
+## Check Pre-timing
+
+This script puts stuff in empty dialogue lines (the actor name, and alternating `a` or `b`).
+
+This lets you check pre-timed subtitles without actually having a translation.
+You can't check CPS of course, but you can see whether the lines are lined up properly, whether they match their actor, etc.
+
+It also includes an undo macro, so you can clean up after yourself after making changes.
+
+It ignores lines that already have text in them.
+If the line only has tags, it puts the text after them. (that way you can see what those tags do to the text.)
+
+Formerly known as A-B, after the alternating a-b it puts in the lines.
+
 
 ## K-Timing -> Alpha Timing
 
-Makes doing alpha timing significantly easier by getting rid of the part where you do alpha timing.
+Makes doing [alpha timing](https://fansubbers.miraheze.org/wiki/Glossary#alpha_timing) significantly easier, by getting rid of the part where you do alpha timing.
 
-Instead, K-Time the line, and run the script. The highlighting of the syls will become the appearance of the syls.
+[Time the line in karaoke mode](https://zahuczky.com/0-ktiming-guide/), with the "syllables" as the sections of the line you want to appear. Then run the script, and it'll generate some nice alpha-timed lines for you.
 
 The original line will be commented out, so you can go back and change it easily.
 
@@ -62,58 +126,169 @@ Originally created to convert stuff that should've been alpha timed in the first
 
 ## DependencyControl Global Config
 
+This macro adds additional configuration interfaces for DependencyControl, so you don't have to edit the JSON file.
+
+- `Global Configuration`: lets you change DependencyControl's behaviour.
+- `Extra Feeds`: lets you provide additional update feeds that will be used when checking any script for updates.
+
+Please see [the DependencyControl README](https://github.com/typesettingTools/DependencyControl#configuration) for details on the configuration options.
+
+Time format: `[number][unit]`
+
+- `y` for years
+- `d` for days
+- `h` for hours
+- `m` for minutes
+- `s` for seconds
+
+so `7d` is 7 days, `3d12h` is 3 days and 12 hours, `5m30s` is 5 minutes and 30 seconds, you get the idea
+
+### rationale
+
 There's a line in the DependencyControl README that goes:
 
 > DependencyControl stores its configuration as a JSON file in the _config_ subdirectory of your Aegisub folder (`l0.DependencyControl.json`). Currently you'll have to edit this file manually, in the future there will be a management macro.
 
-The management macro still doesn't exist, so i wrote one myself.
+That line was there for 7 years and the management macro still didn't exist, so I wrote one myself.
+
+## faderer
+
+Lets you as the timer do fade-in/outs without having to bother the typesetter.
+
+Go to the frame before the fade starts, and run the script. Then go to the frame where the fade finishes, and run the script again.
+
+Select whether the fade is to/from Black, White, or Alpha. It'll try to guess from the timings whether you want to fade in or out, and apply the fade.
+
+Includes [code by arch1t3cht](https://github.com/TypesettingTools/arch1t3cht-Aegisub-Scripts/blob/0b67d516c7087c308c81d6a663596615d83126a6/modules/arch/Util.moon#L26-L40) to get frame-accurate times. Used under the terms of the MIT License.
+
+## Em-dash
+
+Lets you:
+- Append an Em-dash to the selected lines
+- Replace instances of `--` with an em-dash
+
+Also, if you use [arch1t3cht's Aegisub](https://github.com/arch1t3cht/aegisub):
+- Insert an Em-dash at the cursor position
+
+because chances are you don't have an em-dash key on your keyboard :)
 
 ## Select Comments
 
 Tiny utility script.
-Easier than `Subtitle > Select Lines` etc
+Easier than `Subtitle > Select Lines` etc.
 
-## A-B
 
-Makes checking pre-timing possible by putting some text in the lines.
-(the actor name, and `a` or `b`, hence the name)
+## Song timer
 
-ignores lines with text in them, prepends to lines with just tags in them
+makes song timing into a rhythm game, so you can vibe while you time
 
-## Audio Clipper
+bind the script to to e.g. space, and then:
 
-useful sometimes (cant losslessly cut in audacity)
+0. tap to initialise (`READY`)
+1. tap to set start time (`START`)
+2. tap to set end time (`END`) + move to next line (`READY`)
+3. go to 1.
 
-**Needs [FFMPEG](https://ffmpeg.org) in your PATH.**
+apparently that's what some vhs era groups did for their entire dialogue timing
 
-Makes audio clips of all the selected lines.
-Output is either stream-copied, or encoded to a format of your choice.
+it's reasonable enough for (rough pass) song timing, especially if you know the song well.
+probably won't be faster, but will be much more enjoyable
 
-By default, makes a folder called `audioclipper_output` and dumps all the files in there.
-The filename is the index of the line in your selection.
-
-## Chapter Generator
-
-Makes XML chapters for Matroska.
-
-Incomplete clone of the chapter generator in [Significance](https://github.com/unanimated/luaegisub/blob/master/ua.Significance.lua).
-
-Makes lines with the effect `[Cc]hapter`, `[Cc]hptr` or `[Cc]hap` into chapters.
-
-Start time is the timestamp, line text is the chapter name.
-Language is hardcoded to English.
-
-## Restyler
-
-previously `become-fansubber.lua`
-
-Changes style of selected lines to `Default` and copies italic+alignment values from the script's styles to inline tags.
-This is meant for restyling crunchyroll scripts to the fansub group's house style.
-
-Can't help if the source script isn't sanely styled.
 
 ## Scenebleed Detector
 
 Finds scenebleeds in the selected lines, and marks them with an effect (`bleed`).
 
-hardcoded threshold of 500ms.
+This is meant in the vein of unanimated's Quality Check script. It's to help spot mistakes, not as your only check.
+
+It has a hardcoded threshold of 500ms.
+
+
+## Consistency assistant
+
+`ctrl-c-ctrl-v.lua`
+
+i dont remember
+
+
+## Shenanigans
+
+This script makes dialogue motion-tracking shenanigans easier to manage, by splitting them off into a separate file.
+
+First, define a shenanigan file by making a line in the dialogue file with the effect `import`, and a path to the file as the text.
+
+Like so: `Comment: 10,0:00:00.00,0:00:00.00,Default,,0,0,0,import,shenanigans_naga02_08.ass`
+
+Then time/edit as normal. When you see a line (or group of lines) that could use a shenanigan, mark each line with `shenan some meaningful identifier` in the effect field.
+
+The typesetter goes through all the shenanigans, copies them to the shenanigans file, and does all the motion tracking/effects/whatever in there.
+
+Then, at mux time, you run the script, and it replaces the marked dialogue lines with their counterparts from the shenanigans file.
+
+It's good, because if you ever need to go back and change a line, you can do it without having to wade through 516879832 lines of frame-by-frame motion tracking.
+
+Nowadays this can be handled with folds in [arch1t3cht's Aegisub](https://github.com/arch1t3cht/Aegisub), but they weren't invented yet when this script was written.
+
+There are two implementations here: the python one which we actually use in the mux script, and a lua proof-of-concept.
+
+
+## Syllable Splitter
+
+Splits romaji into karaoke syls.
+
+It tries to use the lengths that the Aegisub K-Timing mode would give if you split it manually.
+
+
+## Timings copier
+
+For when you've timed the romaji for a song and just want to copy those timings to the english thats already in the file.
+
+Requires two consecutive equal-length blocks of lines with different styles from each other.
+i.e. you have your romaji lines, and the english ones directly after, with separate romaji and english styles.
+
+## Comment selection
+
+Make the highlighted text into an inline comment. (encloses it in `{curly brackets}`)
+
+Requires [arch1t3cht's Aegisub](https://github.com/arch1t3cht/aegisub).
+
+i don't think i've ever actually used this lol
+
+
+## Append Comment
+
+pops up a text box for you to write your comment in, and appends it to the line.
+
+i'm not sure i ever used this one either
+
+
+## pos -> an
+
+converts `\pos` positions into `\an` alignments
+
+the idea is you click in the general area of where you want, and then the script converts that into eg `\an1 \an8 \an6` etc
+
+but it's not really very useful because that's more effort than just typing it, especially on a numpad
+
+
+## Audio Clipper
+
+Makes audio clips of all the selected lines.
+Output is either stream-copied, or encoded to a format of your choice.
+
+Select the lines you want to clip, and run the script.
+
+By default, makes a folder called `audioclipper_output` and dumps all the files in there.
+The filename is the index of the line in your selection. (no thats not very useful)
+
+Needs [FFMPEG](https://ffmpeg.org) in your $PATH.
+
+
+## TXT Cleanup
+
+`light-purge.lua`
+
+Script I wrote for LightArrowsEXE to remove actors and/or linebreaks when exporting to TXT.
+I think he wanted it to make doing diffs easier, idk
+
+This is an export filter, not a macro. As such, it won't show up in the normal Automation menu- you have to use `File > Export Subtitles...` and use it from there.
