@@ -25,7 +25,7 @@ realisticly this _probably_ won't be a problem, but still would like to try and 
 italics is fine, it just does {\i1\i0}, which is jank and bad but works fine so i won't worry about it too much]]
 	if italic == true then
 		txt="{\\i1}"..txt
-	elseif italics == false then
+	elseif italic == false then
 		txt="{\\i0}"..txt
 	end
 	if align ~= nil then
