@@ -48,11 +48,27 @@ function main(sub, sel)
 	local new_style_name = "Default"
 	local new_style = styles[new_style_name]
 
+	if new_style == nil then
+		local style_names = {}
+		for k, v in ipairs(styles) do
+			table.insert(style_names, v.name)
+		end
+
+		local button_ok, result = aegisub.dialog.display({
+			{x=0, y=0,class="label", label="You don't have a \""..new_style_name.."\" style. Select a style to change the selected lines to:"},
+			{x=0, y=1, class="dropdown", items=style_names, value=style_names[1], name="style"},
+		})
+		if not button_ok then aegisub.cancel() end
+
+		new_style_name = result.style
+		new_style = styles[new_style_name]
+	end
+
 
 	for h, i in ipairs(sel) do
 		-- TODO: automatically exclude styles (also configurable)
 		local line = sub[i]
-		local old_style = styles[line.style] -- reinventing the wheel a bit here, since karaskel can do this with preproc_line_size (line.styleref), but it also adds loads of other crap we don't care about for the same functionality in the end, so ¯\_(ツ)_/¯
+		local old_style = styles[line.style]
 		local italic = get_new(old_style.italic, new_style.italic)
 		local align = get_new(old_style.align, new_style.align)
 		line.style = new_style_name
