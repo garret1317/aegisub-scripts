@@ -1,7 +1,7 @@
 script_name="Restyler"
 script_description="become a fansubber with a click of a button"
 script_author = "garret"
-script_version = "2.1.1"
+script_version = "2.2"
 script_namespace = "garret.restyler"
 
 local haveDepCtrl, DependencyControl, depctrl = pcall(require, "l0.DependencyControl")
