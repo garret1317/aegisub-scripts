@@ -6,11 +6,15 @@ I do timing and editing, so these scripts mainly help with those. There's nothin
 
 ## how do i install them
 
-I believe you should just be able to add them via the [Automation Manager](https://aegisub.org/docs/3.2/Automation/Manager/index.html), or put them in your `autoload` folder.
+You should be able to add them via the [Automation Manager](https://aegisub.org/docs/3.2/Automation/Manager/index.html), or put them in your `autoload` folder.
 
-Most of them should register themselves with [DependencyControl](https://github.com/TypesettingTools/DependencyControl) if you have it installed, but I haven't set up a feed, so you won't be able to update them that way.
+I'm experimenting with offering a DependencyControl feed. The feed URL is:
+```
+https://427738.xyz/depctrl/feed.json
+```
 
-I'm not bothering with DepCtrl for newer scripts as it's too much red tape/boilerplate imo. sorry about that.
+Some of the scripts don't register themselves with DependencyControl, so they won't auto-update. Sorry about that.
+~~if it's any consolation it's not like i ever update them these days anyway~~
 
 ## how do i get help
 
