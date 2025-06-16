@@ -271,6 +271,10 @@ the idea is you click in the general area of where you want, and then the script
 but it's not really very useful because that's more effort than just typing it, especially on a numpad
 
 
+**EDIT**: it is quite useful actually, if you're starting off with something that has explicit positioning
+e.g. ASS converted from other caption formats (WEBVTT, ISDB, ocr'd from DVD)
+
+
 ## Audio Clipper
 
 Makes audio clips of all the selected lines.
