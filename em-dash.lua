@@ -1,7 +1,7 @@
 script_name = "Em-dash"
 script_description = "I do not have an em-dash key on my keyboard"
 script_author = "garret"
-script_version = "2.1.0"
+script_version = "2.1.1"
 
 local em = "—"
 
@@ -15,7 +15,7 @@ local function insert(sub, sel, act)
 	local start = string.sub(line.text, 1, pos - 1)
 	local end_  = string.sub(line.text, pos)
 	line.text = start .. em .. end_
-	aegisub.gui.set_cursor(pos + 1)
+	aegisub.gui.set_cursor(pos + #em)
 	sub[act] = line
 end
 
