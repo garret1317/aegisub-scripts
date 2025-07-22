@@ -1,7 +1,7 @@
 script_name = "Em-dash"
 script_description = "I do not have an em-dash key on my keyboard"
 script_author = "garret"
-script_version = "2.1.1"
+script_version = "2.2.0"
 
 local em = "—"
 
@@ -12,10 +12,24 @@ end
 local function insert(sub, sel, act)
 	local line  = sub[act]
 	local pos   = aegisub.gui.get_cursor()
-	local start = string.sub(line.text, 1, pos - 1)
-	local end_  = string.sub(line.text, pos)
+
+	local highlight_start, highlight_end = aegisub.gui.get_selection()
+	local replace_start, replace_end
+	if highlight_start ~= highlight_end then
+		replace_start = highlight_start -1
+		replace_end = highlight_end
+	else
+		replace_start = pos - 1
+		replace_end = pos
+	end
+
+	local start = string.sub(line.text, 1, replace_start)
+	local end_  = string.sub(line.text, replace_end)
 	line.text = start .. em .. end_
-	aegisub.gui.set_cursor(pos + #em)
+	cursor_pos = replace_start + #em
+
+	aegisub.gui.set_cursor(cursor_pos)
+--	aegisub.gui.set_selection(cursor_pos + 1, cursor_pos + 1)
 	sub[act] = line
 end
 
