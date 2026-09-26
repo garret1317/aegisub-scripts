@@ -8,17 +8,9 @@ I do timing and editing, so these scripts mainly help with those. There's nothin
 
 You should be able to add them via the [Automation Manager](https://aegisub.org/docs/3.2/Automation/Manager/index.html), or put them in your `autoload` folder.
 
-I'm experimenting with offering a DependencyControl feed. The feed URL is:
-```
-https://427738.xyz/depctrl/feed.json
-```
-
-Some of the scripts don't register themselves with DependencyControl, so they won't auto-update. Sorry about that.
-~~if it's any consolation it's not like i ever update them these days anyway~~
-
 ## how do i get help
 
-ping me in the [GJM discord server](https://discord.gg/hQewDqS) (same username) and I'll probably reply eventually. Otherwise, open a github issue.
+idc any more sorry
 
 ```
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
